@@ -782,20 +782,6 @@
         desc: "PuMa 4x4 matrix system - High stakes 4x4 matrix with 55.55x payout multiplier",
         config: pickConfigByName("PuMa 4x4", __READ_CID)
       },
-      {
-        name: "PLS 3x3",
-        img: "Pics/PLS.png", 
-        matrixSize: "3",
-        desc: "PLS 3x3 matrix system - Fast 3x3 matrix with 5.555x payout multiplier",
-        config: pickConfigByName("PLS 3x3", __READ_CID)
-      },
-      {
-        name: "PLS 4x4",
-        img: "Pics/PLS.png",
-        matrixSize: "4", 
-        desc: "PLS 4x4 matrix system - High stakes 4x4 matrix with 55.55x payout multiplier",
-        config: pickConfigByName("PLS 4x4", __READ_CID)
-      }
     ];
 
     // Build tokens array: ordered coins + extra pages
@@ -1086,7 +1072,7 @@
         const symbolToFile = {
           // Core
           'PUMA': 'PuMa.png',
-          'PLS': 'PLS.png',
+          'WPLS': 'PLS.png',
           'PLSX': 'PLSX.png',
           'INC': 'INC.png',
           'PDAI': 'pDAI.png',
@@ -2503,6 +2489,44 @@
           <div class="warning-box"><h5>🔒 Attack Vectors Mitigated</h5><ul><li>Reentrancy guarded</li><li>Try-catch isolation</li><li>Overflow protected</li><li>Front-running resistant</li><li>Immutable params</li></ul></div>
           <div class="danger-box"><h5>💰 Economic Security</h5><ul><li>Vault reserves retention</li><li>Discount logic for 'pay' entries</li><li>Robust EOL unclog mechanism</li><li>Non-transferable receipts</li></ul></div>
         ` },
+        // Decentralized distribution (IPFS, GitHub, ZIP)
+        { id: 'decentralized', title: '🕸️ Decentralized Access  (IPFS & GitHub)', body: `
+          <div class="highlight-box">
+            <h5>Why IPFS?</h5>
+            <p><strong>IPFS is content-addressed.</strong> You get a CID (hash of the files). If the files change, the CID changes. That makes it tamper-evident.</p>
+            <p><strong>Official IPFS CID (source of truth):</strong> <code>bafybeih5sv7gqdcoa3h6gncvt4b2wvmqkiv3qbyfk3fw4z6he3ufm6axiu</code></p>
+          </div>
+          <div class="faq-box">
+            <h5>Open it in 3 super-simple ways</h5>
+            <ol>
+              <li><strong>IPFS (best authenticity)</strong>
+                <ul>
+                  <li>Open folder: <a href="https://ipfs.io/ipfs/bafybeih5sv7gqdcoa3h6gncvt4b2wvmqkiv3qbyfk3fw4z6he3ufm6axiu/" target="_blank" rel="noopener noreferrer">https://ipfs.io/ipfs/bafybeih5sv7gqdcoa3h6gncvt4b2wvmqkiv3qbyfk3fw4z6he3ufm6axiu/</a></li>
+                  <li>Go straight to app: <a href="https://ipfs.io/ipfs/bafybeih5sv7gqdcoa3h6gncvt4b2wvmqkiv3qbyfk3fw4z6he3ufm6axiu/dapp.html" target="_blank" rel="noopener noreferrer">https://ipfs.io/ipfs/bafybeih5sv7gqdcoa3h6gncvt4b2wvmqkiv3qbyfk3fw4z6he3ufm6axiu/dapp.html</a></li>
+                </ul>
+              </li>
+              <li><strong>GitHub (fast)</strong>
+                <ul>
+                  <li>Pages: <a href="https://pulsematrix369.github.io/ENTER/dapp.html" target="_blank" rel="noopener noreferrer">pulsematrix369.github.io/ENTER/dapp.html</a></li>
+                </ul>
+              </li>
+              <li><strong>ZIP (offline)</strong>
+                <ul>
+                  <li>Repo: <a href="https://github.com/pulsematrix369/ENTER" target="_blank" rel="noopener noreferrer">github.com/pulsematrix369/ENTER</a></li>
+                  <li>Click the green “Code” button → “Download ZIP”, unzip, then open <code>dapp.html</code> (or <code>index.html</code>)</li>
+                </ul>
+              </li>
+            </ol>
+          </div>
+          <div class="highlight-box">
+            <h5>Notes</h5>
+            <ul>
+              <li>Works on PulseChain Mainnet (369) and Testnet V4 (943). Use the toggle at the top.</li>
+              <li>You can read without a wallet. Connect only if you want to interact.</li>
+              <li>If something looks off: try a hard refresh, or use the GitHub/ZIP option.</li>
+            </ul>
+          </div>
+        ` },
       ]), []);
 
       return (
@@ -2742,6 +2766,7 @@
                           'logic',
                           'eol',
                           'faqs',
+                          'decentralized',
                           'factory',
                           'metamask',
                           'safety',
