@@ -17,9 +17,21 @@
     window.DEFAULT_CHAIN_ID = 943;
   // Honor previously selected read network across reloads
   try { if (typeof window !== 'undefined') { const saved = Number(localStorage.getItem('READ_CHAIN_ID')); if (saved===369 || saved===943) window.__READ_CHAIN_ID = saved; } } catch {}
+    // Multi-endpoint RPCs (ordered by preference). You can override at runtime:
+    //   window.PULSE_RPCS[369] = ['https://your-rpc-1','https://your-rpc-2']
+    window.PULSE_RPCS = {
+      369: [
+        'https://rpc.pulsechain.com',
+        'https://pulsechain.publicnode.com'
+      ],
+      943: [
+        'https://rpc.v4.testnet.pulsechain.com'
+      ]
+    };
+    // Back-compat single-url map (first entry)
     window.PULSE_RPC = {
-      369: 'https://rpc.pulsechain.com',
-      943: 'https://rpc.v4.testnet.pulsechain.com'
+      369: window.PULSE_RPCS[369][0],
+      943: window.PULSE_RPCS[943][0]
     };
     // Fetch public matrices from Google Sheets API and merge into window.coinConfigs (with polling + cache + optional CF fallback)
     (function(){
@@ -862,29 +874,38 @@
 
     // ===== Provider selection (read-only) =====
   function getReadProvider() {
-      try {
-    const wanted = Number(window.__READ_CHAIN_ID || (typeof localStorage!=='undefined' && localStorage.getItem('READ_CHAIN_ID')) || 943);
-        // Prefer wallet provider if it’s already on the desired chain (no await; use ethereum.chainId)
-        if (typeof window !== 'undefined' && window.ethereum && window.ethereum.chainId) {
-          try {
-            const walletCid = parseInt(String(window.ethereum.chainId), 16);
-            if (walletCid === wanted) {
-              return new ethers.providers.Web3Provider(window.ethereum);
-            }
-          } catch {}
-        }
-        // Fallback to known RPC endpoints
-        const RPCS = {
-          943: (window.PULSE_RPC && window.PULSE_RPC[943]) || 'https://rpc.v4.testnet.pulsechain.com',
-          369: (window.PULSE_RPC && window.PULSE_RPC[369]) || 'https://rpc.pulsechain.com'
-        };
-        const url = RPCS[wanted] || RPCS[943];
-        return new ethers.providers.JsonRpcProvider(url);
-      } catch {
-        // Ultimate fallback
-        return new ethers.providers.JsonRpcProvider('https://rpc.v4.testnet.pulsechain.com');
+    try {
+      const wanted = Number(window.__READ_CHAIN_ID || (typeof localStorage!=='undefined' && localStorage.getItem('READ_CHAIN_ID')) || 943);
+      // Prefer wallet provider if it’s already on the desired chain (no await; use ethereum.chainId)
+      if (typeof window !== 'undefined' && window.ethereum && window.ethereum.chainId) {
+        try {
+          const walletCid = parseInt(String(window.ethereum.chainId), 16);
+          if (walletCid === wanted) {
+            return new ethers.providers.Web3Provider(window.ethereum);
+          }
+        } catch {}
       }
+      // Build a FallbackProvider from configured RPCs
+      const urls = (window.PULSE_RPCS && window.PULSE_RPCS[wanted]) || [];
+      const providers = urls.map(u => new ethers.providers.JsonRpcProvider(u));
+      if (providers.length > 0) {
+        try {
+          return new ethers.providers.FallbackProvider(
+            providers.map(p => ({ provider: p, weight: 1, stallTimeout: 900 })),
+            { quorum: 1, retryTimeout: 1500 }
+          );
+        } catch {
+          return providers[0];
+        }
+      }
+      // Single-url fallback
+      const url = (window.PULSE_RPC && window.PULSE_RPC[wanted]) || (wanted===369 ? 'https://rpc.pulsechain.com' : 'https://rpc.v4.testnet.pulsechain.com');
+      return new ethers.providers.JsonRpcProvider(url);
+    } catch {
+      // Ultimate fallback
+      return new ethers.providers.JsonRpcProvider('https://rpc.v4.testnet.pulsechain.com');
     }
+  }
 
     // ===== Open VP utilities (fixed vpId vs tokenId logic) =====
     function getVPStructureSize(matrixSize) { return matrixSize === 3 ? 13 : 85; }
@@ -2494,15 +2515,15 @@
           <div class="highlight-box">
             <h5>Why IPFS?</h5>
             <p><strong>IPFS is content-addressed.</strong> You get a CID (hash of the files). If the files change, the CID changes. That makes it tamper-evident.</p>
-            <p><strong>Official IPFS CID (source of truth):</strong> <code>bafybeih5sv7gqdcoa3h6gncvt4b2wvmqkiv3qbyfk3fw4z6he3ufm6axiu</code></p>
+            <p><strong>Official IPFS CID (source of truth):</strong> <code>bafybeicanpkwtffo2b6a46kbivz6zg4nnzotgnbcxendu2qvn6ss3ov2qa</code></p>
           </div>
           <div class="faq-box">
             <h5>Open it in 3 super-simple ways</h5>
             <ol>
               <li><strong>IPFS (best authenticity)</strong>
                 <ul>
-                  <li>Open folder: <a href="https://ipfs.io/ipfs/bafybeih5sv7gqdcoa3h6gncvt4b2wvmqkiv3qbyfk3fw4z6he3ufm6axiu/" target="_blank" rel="noopener noreferrer">https://ipfs.io/ipfs/bafybeih5sv7gqdcoa3h6gncvt4b2wvmqkiv3qbyfk3fw4z6he3ufm6axiu/</a></li>
-                  <li>Go straight to app: <a href="https://ipfs.io/ipfs/bafybeih5sv7gqdcoa3h6gncvt4b2wvmqkiv3qbyfk3fw4z6he3ufm6axiu/dapp.html" target="_blank" rel="noopener noreferrer">https://ipfs.io/ipfs/bafybeih5sv7gqdcoa3h6gncvt4b2wvmqkiv3qbyfk3fw4z6he3ufm6axiu/dapp.html</a></li>
+                  <li>Open folder: <a href="https://ipfs.io/ipfs/bafybeicanpkwtffo2b6a46kbivz6zg4nnzotgnbcxendu2qvn6ss3ov2qa/" target="_blank" rel="noopener noreferrer">https://ipfs.io/ipfs/bafybeicanpkwtffo2b6a46kbivz6zg4nnzotgnbcxendu2qvn6ss3ov2qa/</a></li>
+                  <li>Go straight to app: <a href="https://ipfs.io/ipfs/bafybeicanpkwtffo2b6a46kbivz6zg4nnzotgnbcxendu2qvn6ss3ov2qa/dapp.html" target="_blank" rel="noopener noreferrer">https://ipfs.io/ipfs/bafybeicanpkwtffo2b6a46kbivz6zg4nnzotgnbcxendu2qvn6ss3ov2qa/dapp.html</a></li>
                 </ul>
               </li>
               <li><strong>GitHub (fast)</strong>
@@ -3200,9 +3221,8 @@
               // Single provider for selected read network
               try {
                 const wanted = Number(window.__READ_CHAIN_ID || localStorage.getItem('READ_CHAIN_ID') || 943);
-                const url = (window.PULSE_RPC && window.PULSE_RPC[wanted]) || (wanted===369 ? 'https://rpc.pulsechain.com' : 'https://rpc.v4.testnet.pulsechain.com');
                 const name = wanted===369 ? 'PulseChain Mainnet' : 'PulseChain Testnet v4';
-                providers.push({ prov: new ethers.providers.JsonRpcProvider(url), name });
+                providers.push({ prov: getReadProvider(), name });
               } catch {}
               async function fetchLastEntryTs(cfg){
                 if (!cfg || !cfg.vault || !cfg.abiKey || !window.AllVaultABI || !window.AllVaultABI[cfg.abiKey]) return null;
@@ -3318,8 +3338,7 @@
                       try {
                         if (!cfg?.vault || !cfg?.token || !cfg?.abiKey) return;
                         const wanted = Number(window.__READ_CHAIN_ID || 943);
-                        const RPC = wanted===369? 'https://rpc.pulsechain.com' : (wanted===943? 'https://rpc.v4.testnet.pulsechain.com' : '');
-                        const provider = RPC ? new ethers.providers.JsonRpcProvider(RPC) : (window.ethereum ? new ethers.providers.Web3Provider(window.ethereum) : null);
+                        const provider = getReadProvider() || (window.ethereum ? new ethers.providers.Web3Provider(window.ethereum) : null);
                         if (!provider) return;
                         const vault = new ethers.Contract(cfg.vault, window.AllVaultABI[cfg.abiKey], provider);
                         const erc20 = new ethers.Contract(cfg.token, [
@@ -4221,18 +4240,17 @@
                         const delay = setTimeout(async () => {
                           setChecking(true);
                           const wanted = Number(window.__READ_CHAIN_ID || localStorage.getItem('READ_CHAIN_ID') || 943);
-                          const url = (window.PULSE_RPC && window.PULSE_RPC[wanted]) || (wanted===369 ? 'https://rpc.pulsechain.com' : 'https://rpc.v4.testnet.pulsechain.com');
-                          const RPCS = [ { url, name: wanted===369 ? 'PulseChain Mainnet' : 'PulseChain Testnet v4' } ];
+                          const provider = getReadProvider();
+                          const RPCS = [ { prov: provider, name: wanted===369 ? 'PulseChain Mainnet' : 'PulseChain Testnet v4' } ];
                           const abi = [
                             'function name() view returns (string)',
                             'function symbol() view returns (string)',
                             'function decimals() view returns (uint8)'
                           ];
                           let found = null;
-                          for (const r of RPCS) {
+              for (const r of RPCS) {
                             try {
-                              const prov = new ethers.providers.JsonRpcProvider(r.url);
-                              const c = new ethers.Contract(addr, abi, prov);
+                const c = new ethers.Contract(addr, abi, r.prov || provider);
                               const [name, symbol, decimals] = await Promise.all([
                                 c.name().catch(() => null),
                                 c.symbol().catch(() => null),
@@ -5055,7 +5073,7 @@
             if (window.ethereum) {
               try { const wp = new ethers.providers.Web3Provider(window.ethereum); const net = await wp.getNetwork(); const cid = Number(net.chainId); if (cid === 943 || cid === 369) provider = wp; } catch {}
             }
-            if (!provider) provider = new ethers.providers.JsonRpcProvider((window.PULSE_RPC && window.PULSE_RPC[943]) || 'https://rpc.v4.testnet.pulsechain.com');
+            if (!provider) provider = getReadProvider();
             const vault = new ethers.Contract(cfg.vault, window.AllVaultABI[cfg.abiKey], provider);
 
             let receipt = null;
@@ -5754,7 +5772,7 @@
       if (window.ethereum) {
         try { const wp = new ethers.providers.Web3Provider(window.ethereum); const net = await wp.getNetwork(); const cid = Number(net.chainId); if (cid === 943 || cid === 369) provider = wp; } catch {}
       }
-      if (!provider) provider = new ethers.providers.JsonRpcProvider((window.PULSE_RPC && window.PULSE_RPC[943]) || 'https://rpc.v4.testnet.pulsechain.com');
+  if (!provider) provider = getReadProvider();
           const vault = new ethers.Contract(cfg.vault, window.AllVaultABI[cfg.abiKey], provider);
           const receiptAddr = await vault.getReceiptContract();
           const rc = new ethers.Contract(receiptAddr, ["function balanceOf(address, uint256) view returns (uint256)"], provider);
@@ -5998,11 +6016,7 @@
             // Use the current read provider (selected network)
             let provider = null;
             try { provider = getReadProvider(); } catch {}
-            if (!provider) {
-              const wanted = Number(window.__READ_CHAIN_ID || localStorage.getItem('READ_CHAIN_ID') || 943);
-              const url = (window.PULSE_RPC && window.PULSE_RPC[wanted]) || (wanted===369 ? 'https://rpc.pulsechain.com' : 'https://rpc.v4.testnet.pulsechain.com');
-              provider = new ethers.providers.JsonRpcProvider(url);
-            }
+            if (!provider) { provider = getReadProvider(); }
             // Ensure contract exists on the current network before making calls
             const code = await provider.getCode(cfg.vault);
             if (code === '0x') {
