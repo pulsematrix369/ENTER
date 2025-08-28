@@ -512,24 +512,6 @@
 </head>
 <body>
   <!-- Simple network toggle: choose read network independent of wallet for accurate code checks -->
-  <script>
-    (function(){
-      try{
-        // Default to FAQ on first load if there is no hash/bookmark
-        if(!location.hash){
-          history.replaceState(null,'','#page=faq');
-        }
-        // Respect explicit hashes (bookmarks). If hash becomes empty unexpectedly, restore FAQ.
-        window.addEventListener('hashchange', function(){
-          try{
-            if(!location.hash){
-              history.replaceState(null,'','#page=faq');
-            }
-          }catch(_e){}
-        });
-      }catch(_e){}
-    })();
-  </script>
   <div id="read-net-toggle" style="position:fixed;top:8px;right:10px;z-index:9999;display:flex;gap:6px;font-family:monospace;">
     <button id="btn-testnet" style="padding:6px 10px;border-radius:8px;border:1px solid #0f0;background:#000;color:#0f0;cursor:pointer;transition:all .2s ease;">Testnet V4</button>
     <button id="btn-mainnet" style="padding:6px 10px;border-radius:8px;border:1px solid #0f0;background:#000;color:#0f0;cursor:pointer;transition:all .2s ease;">MainNet</button>
@@ -1115,7 +1097,7 @@
           'PLSX': 'PLSX.png',
           'INC': 'INC.png',
           'PDAI': 'pDAI.png',
-          'HEX': 'pHEX.png',
+          'PHEX': 'pHEX.png',
           'EHEX': 'eHEX.png',
           'PWBTC': 'pWBTC.png',
           // Test tokens (t*)
@@ -1161,10 +1143,32 @@
             return new URL(rel, window.location.href).href;
           } catch { return new URL('Pics/factory.png', window.location.href).href; }
         }
+        // Address+chain override map for specific tokens (lowercased address). Key format: `${chainId}:${address}`.
+        // Ensures native pHEX vs bridged eHEX show correct icons on PulseChain mainnet.
+        window.ADDRESS_ICON_MAP = Object.assign({}, window.ADDRESS_ICON_MAP, {
+          '369:0x2b591e99afe9f32eaa6214f7b7629768c40eeb39': 'Pics/pHEX.png', // pHEX (native on PulseChain)
+          '369:0x57fde0a71132198bbec939b98976993d8d89d225': 'Pics/eHEX.png'  // eHEX (bridged from Ethereum)
+        });
+        
+        // Resolve image with address+chain override first; fallback to symbol/name mapping.
+        function resolveTokenImageOverride(chainId, tokenAddress, fallbackSymbol, fallbackName){
+          try{
+            const cid = Number(chainId || (typeof window !== 'undefined' && window.__READ_CHAIN_ID) || 943);
+            const addr = String(tokenAddress || '').toLowerCase();
+            if (addr) {
+              const key = `${cid}:${addr}`;
+              const rel = window.ADDRESS_ICON_MAP && window.ADDRESS_ICON_MAP[key];
+              if (rel) return new URL(rel, window.location.href).href;
+            }
+          }catch{}
+          try { return resolveTokenImage(fallbackSymbol, fallbackName); } catch {
+            return new URL('Pics/factory.png', window.location.href).href;
+          }
+        }
         // Match by inclusion against known symbols (case-insensitive)
         const candidates = [symbolUpper, (c.name || '').toUpperCase()];
         // Prefer the same resolver as used elsewhere so both UI and MetaMask agree on the icon
-        const img = resolveTokenImage(cachedSymbol || baseName, c.name || baseName);
+  const img = resolveTokenImageOverride((cfg && cfg.chainId) || (typeof window !== 'undefined' && window.__READ_CHAIN_ID), (cfg && cfg.token) || '', cachedSymbol || baseName, c.name || baseName);
   extrasTokens.push({ name, img, matrixSize: is4 ? '4' : '3', desc: 'User matrix', config: cfg });
       }
       // Sort core in logical order: PUMA, PLS, (PLSX, INC, pHEX, eHEX, pDAI), 3x3 before 4x4
@@ -3110,9 +3114,11 @@
                   const tokenAddress = cfg.token;
                   let symbol = token.name.replace(/[^a-z0-9]/ig,'').slice(0,11) || 'TOKEN';
                   const decimals = cfg.decimals || 18;
-                  const image = (typeof resolveTokenImage === 'function')
-                    ? resolveTokenImage(symbol, token.name)
-                    : (new URL(/puma/i.test(token.name) ? 'Pics/PuMa.png' : 'Pics/PLS.png', window.location.href).href);
+                  const image = (typeof resolveTokenImageOverride === 'function')
+                    ? resolveTokenImageOverride((cfg && cfg.chainId) || (typeof window !== 'undefined' && window.__READ_CHAIN_ID), (cfg && cfg.token) || '', symbol, token.name)
+                    : ((typeof resolveTokenImage === 'function')
+                        ? resolveTokenImage(symbol, token.name)
+                        : (new URL(/puma/i.test(token.name) ? 'Pics/PuMa.png' : 'Pics/PLS.png', window.location.href).href));
                   await window.ethereum.request({ method:'wallet_watchAsset', params:{ type:'ERC20', options:{ address: tokenAddress, symbol, decimals, image }}});
                   setTxMsg(`Added ${symbol}`);
                 } catch(e){ setTxMsg('Add token failed'); }
@@ -4518,7 +4524,6 @@
                                     <li>Enter any ERC20/PRC20 token contract address</li>
                                     <li>Choose 3x3 (faster) or 4x4 (higher risk/rewards)</li>
                                     <li>Set your custom entry amount.     ⚠️ You MUST also pay for the #1 Entry ⚠️</li>
-                                    <li> Check the current GAS price @ {' '}  <a href="https://plsfolio.com/gas/" target="_blank" rel="noopener noreferrer" style={{ color: '#00ff00', textDecoration: 'underline' }}> https://plsfolio.com/gas/</a></li>
                                     <li>Click 'One-Click DEPLOY' - Confirm deployment - Approve spending - Confirm transaction </li>
                                   </ol>
                                 </div>
