@@ -1899,9 +1899,12 @@
                 if (!isClosed) {
                   let fill;
                   if (vpIndex === firstOpenIdx) {
-                    // Active VP: baseline + real progress
-                    fill = computePrefilledForLeaderIndex(vpIndex, totalCurrentEntries, lastEOLTriggerEntry, matrixSize);
-                    fill = Math.max(fill, baseline);
+                    // Active VP: baseline + real progress (include any joins after the baseline)
+                    const prefillAmount = computePrefilledForLeaderIndex(vpIndex, totalCurrentEntries, lastEOLTriggerEntry, matrixSize);
+                    // Compute leftover joins since the previous paypoint (this yields the 'extra' entries filling the active VP)
+                    const prevPayPoint = getVPPaymentPointByIndex(vpIndex - 1, matrixSize, lastEOLTriggerEntry);
+                    const leftover = Math.max(0, totalCurrentEntries - prevPayPoint);
+                    fill = Math.max(prefillAmount, baseline) + leftover;
                   } else {
                     // Future VPs: exact baseline only
                     fill = baseline;
@@ -2029,10 +2032,16 @@
               while (nextOpenVPs.length < windowLen && guard2++ < 500) {
                 const leaderId = base + vpIndex;
                 const payPoint = getVPPaymentPointByIndex(vpIndex, matrixSize, lastEOLTriggerEntry);
-                if (totalCurrentEntries < payPoint) {
-                  let fill = (vpIndex === firstOpenIdx)
-                    ? Math.max(baseline, computePrefilledForLeaderIndex(vpIndex, totalCurrentEntries, lastEOLTriggerEntry, matrixSize))
-                    : baseline;
+                  if (totalCurrentEntries < payPoint) {
+                  let fill;
+                  if (vpIndex === firstOpenIdx) {
+                    const prefillAmount = computePrefilledForLeaderIndex(vpIndex, totalCurrentEntries, lastEOLTriggerEntry, matrixSize);
+                    const rawFills = computeVPFilledByIndex ? computeVPFilledByIndex(vpIndex, totalCurrentEntries, matrixSize, lastEOLTriggerEntry) : 0;
+                    const additionalFills = Math.max(0, rawFills - baseline);
+                    fill = Math.max(prefillAmount, baseline) + additionalFills;
+                  } else {
+                    fill = baseline;
+                  }
                   nextOpenVPs.push({ tokenId: leaderId, payPoint, leader: leaderId, filledCount: Math.min(structureSize, fill), structureSize });
                 }
                 vpIndex++;
@@ -3036,13 +3045,16 @@
                 let openVPFill = 0;
                 let activeWork = 0; // entries beyond baseline currently filling the active VP
                 if (firstOpenIdx !== null) {
-                  // Compute fill: before VP#1 pays use raw fill (baseline = 0), after uses prefilled+progress
+                  // Compute fill: before VP#1 pays use raw fill (baseline = 0), after use prefill plus any joins beyond baseline
                   if (!vp1Complete) {
                     openVPFill = computeVPFilledByIndex(firstOpenIdx, totalEntriesMade, matrixSize, lastEOLTriggerEntry);
                     activeWork = Math.max(0, openVPFill); // baseline is 0 before VP#1 completes
                   } else {
-                    openVPFill = computePrefilledForLeaderIndex(firstOpenIdx, totalEntriesMade, lastEOLTriggerEntry, matrixSize);
-                    openVPFill = Math.max(openVPFill, baseline); // enforce baseline visuals
+                    const prefillAmount = computePrefilledForLeaderIndex(firstOpenIdx, totalEntriesMade, lastEOLTriggerEntry, matrixSize);
+                    // Compute leftover joins since the previous paypoint for this VP (works for 3x3 and 4x4)
+                    const prevPayPoint = getVPPaymentPointByIndex(firstOpenIdx - 1, matrixSize, lastEOLTriggerEntry);
+                    const leftover = Math.max(0, totalEntriesMade - prevPayPoint);
+                    openVPFill = Math.max(prefillAmount, baseline) + leftover;
                     activeWork = Math.max(0, openVPFill - baseline);
                   }
                 } else {
@@ -3447,8 +3459,11 @@
                           if (!vp1Done) {
                             fill = filledByIdx ? filledByIdx(firstOpenIdx, totalEntriesMade, matrixSize, lastTrig) : 0;
                           } else {
-                            fill = prefFilled ? prefFilled(firstOpenIdx, totalEntriesMade, lastTrig, matrixSize) : baseline;
-                            fill = Math.max(fill, baseline);
+                            // Compute displayed fill as prefill (or baseline) plus leftover joins since previous paypoint
+                            const prefillAmount = prefFilled ? prefFilled(firstOpenIdx, totalEntriesMade, lastTrig, matrixSize) : baseline;
+                            const prevPayPoint = getPayPoint ? getPayPoint(firstOpenIdx - 1, matrixSize, lastTrig) : 0;
+                            const leftover = Math.max(0, totalEntriesMade - prevPayPoint);
+                            fill = Math.max(prefillAmount, baseline) + leftover;
                           }
                           healthPct = Math.max(0, Math.min(100, Math.round((Math.min(fill, sSize) / sSize) * 100)));
                           // Show only the currently filling VP as X/Size
