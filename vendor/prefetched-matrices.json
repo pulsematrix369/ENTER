@@ -1,0 +1,729 @@
+{
+  "generatedAt": "2025-10-06T17:15:54.893Z",
+  "source": "pulsemat_ALL_matrix.ALL",
+  "matrixCount": 19,
+  "items": [
+    {
+      "id": 1,
+      "chainId": 369,
+      "tokenName": "WPLS",
+      "tokenAddress": "0xA1077a294dDE1B09bB078844df40758a5D0f9a27",
+      "resolvedTokenAddress": "0xA1077a294dDE1B09bB078844df40758a5D0f9a27",
+      "vault": "0x51f7afFc0E0e3922E8662898aF1F99bAdb2D0912",
+      "entryFee": {
+        "wei": "369000000000000000000000",
+        "formatted": "369000.000000"
+      },
+      "payout": {
+        "wei": "2049795000000000000000000",
+        "formatted": "2049795.000000"
+      },
+      "vaultBalance": {
+        "wei": "2583000000000000000000000",
+        "formatted": "2583000.000000"
+      },
+      "tokenMeta": {
+        "decimals": 18,
+        "symbol": "WPLS",
+        "name": "Wrapped Pulse"
+      },
+      "vaultState": {
+        "nextTokenId": "8",
+        "lastEntryTimestamp": "1759586065",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "7"
+      },
+      "db": {
+        "entryFee": 369000,
+        "receipt": "0x7F36f300dE705fB9fdE43af7e96e7F90Dd340d6f"
+      }
+    },
+    {
+      "id": 2,
+      "chainId": 369,
+      "tokenName": "eHEX",
+      "tokenAddress": "0x57fde0a71132198BBeC939B98976993d8D89D225",
+      "resolvedTokenAddress": "0x57fde0a71132198BBeC939B98976993d8D89D225",
+      "vault": "0x11fFDACa642F46564871f4E8a23373e2dE55ce10",
+      "entryFee": {
+        "wei": "555500000000",
+        "formatted": "5555.000000"
+      },
+      "payout": {
+        "wei": "30858025000000",
+        "formatted": "308580.250000"
+      },
+      "vaultBalance": {
+        "wei": "3888500000000",
+        "formatted": "38885.000000"
+      },
+      "tokenMeta": {
+        "decimals": 8,
+        "symbol": "HEX",
+        "name": "HEX from Ethereum"
+      },
+      "vaultState": {
+        "nextTokenId": "8",
+        "lastEntryTimestamp": "1759360095",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "7"
+      },
+      "db": {
+        "entryFee": 5555,
+        "receipt": "0xad738769e1d536175ffb71e3bfbf973382f8bb04"
+      }
+    },
+    {
+      "id": 3,
+      "chainId": 369,
+      "tokenName": "pHEX",
+      "tokenAddress": "0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39",
+      "resolvedTokenAddress": "0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39",
+      "vault": "0x002Bd3cc2ecF997b58908Bd32D671de466838355",
+      "entryFee": {
+        "wei": "369000000000",
+        "formatted": "3690.000000"
+      },
+      "payout": {
+        "wei": "2049795000000",
+        "formatted": "20497.950000"
+      },
+      "vaultBalance": {
+        "wei": "2214000000000",
+        "formatted": "22140.000000"
+      },
+      "tokenMeta": {
+        "decimals": 8,
+        "symbol": "HEX",
+        "name": "HEX"
+      },
+      "vaultState": {
+        "nextTokenId": "7",
+        "lastEntryTimestamp": "1759586025",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "6"
+      },
+      "db": {
+        "entryFee": 3690,
+        "receipt": "0x06a52f5d88bc64640b1520cbced9fff3367440df"
+      }
+    },
+    {
+      "id": 4,
+      "chainId": 369,
+      "tokenName": "PLSX",
+      "tokenAddress": "0x95B303987A60C71504D99Aa1b13B4DA07b0790ab",
+      "resolvedTokenAddress": "0x95B303987A60C71504D99Aa1b13B4DA07b0790ab",
+      "vault": "0x1c87e56Eb4AD23F3B9E3A43Edc648A43Addf92f9",
+      "entryFee": {
+        "wei": "555555000000000000000000",
+        "formatted": "555555.000000"
+      },
+      "payout": {
+        "wei": "3086108025000000000000000",
+        "formatted": "3086108.025000"
+      },
+      "vaultBalance": {
+        "wei": "1666665000000000000000000",
+        "formatted": "1666665.000000"
+      },
+      "tokenMeta": {
+        "decimals": 18,
+        "symbol": "PLSX",
+        "name": "PulseX"
+      },
+      "vaultState": {
+        "nextTokenId": "4",
+        "lastEntryTimestamp": "1759586255",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "3"
+      },
+      "db": {
+        "entryFee": 555555,
+        "receipt": "0x5f4fddad75eb4552a2b69cdac1e035d6d54c5db6"
+      }
+    },
+    {
+      "id": 5,
+      "chainId": 369,
+      "tokenName": "pDAI",
+      "tokenAddress": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+      "resolvedTokenAddress": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+      "vault": "0x83035ED4D32Ec888B73775d8b77C354842f7FFA0",
+      "entryFee": {
+        "wei": "100000000000000000000000",
+        "formatted": "100000.000000"
+      },
+      "payout": {
+        "wei": "555500000000000000000000",
+        "formatted": "555500.000000"
+      },
+      "vaultBalance": {
+        "wei": "700000000000000000000000",
+        "formatted": "700000.000000"
+      },
+      "tokenMeta": {
+        "decimals": 18,
+        "symbol": "DAI",
+        "name": "Dai Stablecoin"
+      },
+      "vaultState": {
+        "nextTokenId": "8",
+        "lastEntryTimestamp": "1759769235",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "7"
+      },
+      "db": {
+        "entryFee": 100000,
+        "receipt": "0x935c06dd784a6f290843cf24cb4959d08023678b"
+      }
+    },
+    {
+      "id": 6,
+      "chainId": 369,
+      "tokenName": "INC",
+      "tokenAddress": "0x2fa878Ab3F87CC1C9737Fc071108F904c0B0C95d",
+      "resolvedTokenAddress": "0x2fa878Ab3F87CC1C9737Fc071108F904c0B0C95d",
+      "vault": "0x4f5a0f35024A94C29aAFD7a7b5a3308FfbB0Aeb8",
+      "entryFee": {
+        "wei": "369000000000000000000",
+        "formatted": "369.000000"
+      },
+      "payout": {
+        "wei": "2049795000000000000000",
+        "formatted": "2049.795000"
+      },
+      "vaultBalance": {
+        "wei": "1107000000000000000000",
+        "formatted": "1107.000000"
+      },
+      "tokenMeta": {
+        "decimals": 18,
+        "symbol": "INC",
+        "name": "Incentive"
+      },
+      "vaultState": {
+        "nextTokenId": "4",
+        "lastEntryTimestamp": "1759586305",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "3"
+      },
+      "db": {
+        "entryFee": 369,
+        "receipt": "0x4a5550b884d1a987d4c1f148248454082616a09e"
+      }
+    },
+    {
+      "id": 7,
+      "chainId": 369,
+      "tokenName": "pDAI",
+      "tokenAddress": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+      "resolvedTokenAddress": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+      "vault": "0x8fA2aDcfc5984f4016E21a80F0e6080aD4c21DC5",
+      "entryFee": {
+        "wei": "36900000000000000000000",
+        "formatted": "36900.000000"
+      },
+      "payout": {
+        "wei": "2049795000000000000000000",
+        "formatted": "2049795.000000"
+      },
+      "vaultBalance": {
+        "wei": "110700000000000000000000",
+        "formatted": "110700.000000"
+      },
+      "tokenMeta": {
+        "decimals": 18,
+        "symbol": "DAI",
+        "name": "Dai Stablecoin"
+      },
+      "vaultState": {
+        "nextTokenId": "4",
+        "lastEntryTimestamp": "1759586125",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "3"
+      },
+      "db": {
+        "entryFee": 36900,
+        "receipt": "0x4b577da3f48e28abaafacce457e45bcfaf0854e0"
+      }
+    },
+    {
+      "id": 8,
+      "chainId": 369,
+      "tokenName": "wBTC",
+      "tokenAddress": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+      "resolvedTokenAddress": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+      "vault": "0xbfE1E4074ff86Cac630c0174AA49b41E47Cbf2B3",
+      "entryFee": {
+        "wei": "100000000",
+        "formatted": "1.000000"
+      },
+      "payout": {
+        "wei": "555500000",
+        "formatted": "5.555000"
+      },
+      "vaultBalance": {
+        "wei": "200000000",
+        "formatted": "2.000000"
+      },
+      "tokenMeta": {
+        "decimals": 8,
+        "symbol": "WBTC",
+        "name": "Wrapped BTC"
+      },
+      "vaultState": {
+        "nextTokenId": "3",
+        "lastEntryTimestamp": "1759334315",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "2"
+      },
+      "db": {
+        "entryFee": 1,
+        "receipt": "0x6d839fab957c176930cbf3d4b18c89072e53cf89"
+      }
+    },
+    {
+      "id": 9,
+      "chainId": 369,
+      "tokenName": "wBTC",
+      "tokenAddress": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+      "resolvedTokenAddress": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+      "vault": "0xAa2B6CFac8EDA3C470771614527b60b75e128f48",
+      "entryFee": {
+        "wei": "100000000",
+        "formatted": "1.000000"
+      },
+      "payout": {
+        "wei": "5555000000",
+        "formatted": "55.550000"
+      },
+      "vaultBalance": {
+        "wei": "200000000",
+        "formatted": "2.000000"
+      },
+      "tokenMeta": {
+        "decimals": 8,
+        "symbol": "WBTC",
+        "name": "Wrapped BTC"
+      },
+      "vaultState": {
+        "nextTokenId": "3",
+        "lastEntryTimestamp": "1759334375",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "2"
+      },
+      "db": {
+        "entryFee": 1,
+        "receipt": "0x8bb4d9b0cd0f32bc1c517d200dd1c6e14604b492"
+      }
+    },
+    {
+      "id": 10,
+      "chainId": 369,
+      "tokenName": "pHEX",
+      "tokenAddress": "0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39",
+      "resolvedTokenAddress": "0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39",
+      "vault": "0xe1eD93261bD6B3B78e58c3c7d5a9ba80e674e6C3",
+      "entryFee": {
+        "wei": "555500000000",
+        "formatted": "5555.000000"
+      },
+      "payout": {
+        "wei": "30858025000000",
+        "formatted": "308580.250000"
+      },
+      "vaultBalance": {
+        "wei": "1111000000000",
+        "formatted": "11110.000000"
+      },
+      "tokenMeta": {
+        "decimals": 8,
+        "symbol": "HEX",
+        "name": "HEX"
+      },
+      "vaultState": {
+        "nextTokenId": "3",
+        "lastEntryTimestamp": "1759360435",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "2"
+      },
+      "db": {
+        "entryFee": 3690,
+        "receipt": "0x3766b93f3000c5a287884eb7d93f03bc57be0262"
+      }
+    },
+    {
+      "id": 11,
+      "chainId": 369,
+      "tokenName": "eHEX",
+      "tokenAddress": "0x57fde0a71132198BBeC939B98976993d8D89D225",
+      "resolvedTokenAddress": "0x57fde0a71132198BBeC939B98976993d8D89D225",
+      "vault": "0x5BF2BF687324561F56ce35E3BcB12A8384BFE595",
+      "entryFee": {
+        "wei": "369000000000",
+        "formatted": "3690.000000"
+      },
+      "payout": {
+        "wei": "2049795000000",
+        "formatted": "20497.950000"
+      },
+      "vaultBalance": {
+        "wei": "738000000000",
+        "formatted": "7380.000000"
+      },
+      "tokenMeta": {
+        "decimals": 8,
+        "symbol": "HEX",
+        "name": "HEX from Ethereum"
+      },
+      "vaultState": {
+        "nextTokenId": "3",
+        "lastEntryTimestamp": "1759361235",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "2"
+      },
+      "db": {
+        "entryFee": 5555,
+        "receipt": "0x955ab26b8cda6ce6297d104129b7ebdd30b0699f"
+      }
+    },
+    {
+      "id": 12,
+      "chainId": 369,
+      "tokenName": "DWB",
+      "tokenAddress": "0xAEbcD0F8f69ECF9587e292bdfc4d731c1abedB68",
+      "resolvedTokenAddress": "0xAEbcD0F8f69ECF9587e292bdfc4d731c1abedB68",
+      "vault": "0x127E48E698E0800C885ADF5cfa82E7BcD65d96DF",
+      "entryFee": {
+        "wei": "696969000000000000000000",
+        "formatted": "696969.000000"
+      },
+      "payout": {
+        "wei": "3871662795000000000000000",
+        "formatted": "3871662.795000"
+      },
+      "vaultBalance": {
+        "wei": "696969000000000000000000",
+        "formatted": "696969.000000"
+      },
+      "tokenMeta": {
+        "decimals": 18,
+        "symbol": "DWB",
+        "name": "dickwifbutt"
+      },
+      "vaultState": {
+        "nextTokenId": "2",
+        "lastEntryTimestamp": "1759447045",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "1"
+      },
+      "db": {
+        "entryFee": 696969,
+        "receipt": "0x15f47d1dab134a45c0a995a6e772574307086c7e"
+      }
+    },
+    {
+      "id": 13,
+      "chainId": 369,
+      "tokenName": "sciViVe",
+      "tokenAddress": "0x72a96Ea9DA0C909500eEF1Ef81B433C3A26EB649",
+      "resolvedTokenAddress": "0x72a96Ea9DA0C909500eEF1Ef81B433C3A26EB649",
+      "vault": "0x150B43a9b8f770A7B7D8BB4ee86b116e7Fc99BB3",
+      "entryFee": {
+        "wei": "55555000000000000000000",
+        "formatted": "55555.000000"
+      },
+      "payout": {
+        "wei": "308608025000000000000000",
+        "formatted": "308608.025000"
+      },
+      "vaultBalance": {
+        "wei": "55555000000000000000000",
+        "formatted": "55555.000000"
+      },
+      "tokenMeta": {
+        "decimals": 18,
+        "symbol": "sciViVe",
+        "name": "sciVive"
+      },
+      "vaultState": {
+        "nextTokenId": "2",
+        "lastEntryTimestamp": "1759533925",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "1"
+      },
+      "db": {
+        "entryFee": 55555,
+        "receipt": "0x2b5cc2d090aa4a0ad19186e0c85fb51ed120cef8"
+      }
+    },
+    {
+      "id": 14,
+      "chainId": 369,
+      "tokenName": "FART",
+      "tokenAddress": "0x6f40B31737c2B9010Ca86C8a04683Dd64527E205",
+      "resolvedTokenAddress": "0x6f40B31737c2B9010Ca86C8a04683Dd64527E205",
+      "vault": "0x5509F29e168AaC3cD4c85c043f784B81a0cAe6d0",
+      "entryFee": {
+        "wei": "5555000000000000000000",
+        "formatted": "5555.000000"
+      },
+      "payout": {
+        "wei": "30858025000000000000000",
+        "formatted": "30858.025000"
+      },
+      "vaultBalance": {
+        "wei": "5555000000000000000000",
+        "formatted": "5555.000000"
+      },
+      "tokenMeta": {
+        "decimals": 18,
+        "symbol": "Fartcoin",
+        "name": "Richard Fartcoin"
+      },
+      "vaultState": {
+        "nextTokenId": "2",
+        "lastEntryTimestamp": "1759537235",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "1"
+      },
+      "db": {
+        "entryFee": 5555,
+        "receipt": "0x724ab86d4f687560beca7c54f836917ccc49018f"
+      }
+    },
+    {
+      "id": 15,
+      "chainId": 369,
+      "tokenName": "DORRA",
+      "tokenAddress": "0x393937C233D42bB965373759EcFb6265B998F17e",
+      "resolvedTokenAddress": "0x393937C233D42bB965373759EcFb6265B998F17e",
+      "vault": "0x34F5df6a6040D3c7bbe36E9afEf33fC1C624016B",
+      "entryFee": {
+        "wei": "5555000000000000000000",
+        "formatted": "5555.000000"
+      },
+      "payout": {
+        "wei": "30858025000000000000000",
+        "formatted": "30858.025000"
+      },
+      "vaultBalance": {
+        "wei": "5555000000000000000000",
+        "formatted": "5555.000000"
+      },
+      "tokenMeta": {
+        "decimals": 18,
+        "symbol": "DORRA",
+        "name": "DorraWifHat"
+      },
+      "vaultState": {
+        "nextTokenId": "2",
+        "lastEntryTimestamp": "1759537985",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "1"
+      },
+      "db": {
+        "entryFee": 5555,
+        "receipt": "0x6c851c9086a76b93eb1321128244c3bfae1c2da9"
+      }
+    },
+    {
+      "id": 15,
+      "chainId": 369,
+      "tokenName": "9inch",
+      "tokenAddress": "0x3ca80d83277e721171284667829c686527B8b3c5",
+      "resolvedTokenAddress": "0x3ca80d83277e721171284667829c686527B8b3c5",
+      "vault": "0x7e410F051218c1f13B4d34a6263e21CE56Ca8D45",
+      "entryFee": {
+        "wei": "5555555000000000000000000",
+        "formatted": "5555555.000000"
+      },
+      "payout": {
+        "wei": "30861108025000000000000000",
+        "formatted": "30861108.025000"
+      },
+      "vaultBalance": {
+        "wei": "5555555000000000000000000",
+        "formatted": "5555555.000000"
+      },
+      "tokenMeta": {
+        "decimals": 18,
+        "symbol": "9INCH",
+        "name": "9INCH"
+      },
+      "vaultState": {
+        "nextTokenId": "2",
+        "lastEntryTimestamp": "1759557485",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "1"
+      },
+      "db": {
+        "entryFee": 5555555,
+        "receipt": "0x951024d086af2b68111e72440ca02470ed45ad34"
+      }
+    },
+    {
+      "id": 16,
+      "chainId": 369,
+      "tokenName": "pCOCK",
+      "tokenAddress": "0xc10A4Ed9b4042222d69ff0B374eddd47ed90fC1F",
+      "resolvedTokenAddress": "0xc10A4Ed9b4042222d69ff0B374eddd47ed90fC1F",
+      "vault": "0x8Fe646b9dCA131D1b4c9aAa1CED37dC43Ec4d806",
+      "entryFee": {
+        "wei": "5555000000000000000000",
+        "formatted": "5555.000000"
+      },
+      "payout": {
+        "wei": "30858025000000000000000",
+        "formatted": "30858.025000"
+      },
+      "vaultBalance": {
+        "wei": "5555000000000000000000",
+        "formatted": "5555.000000"
+      },
+      "tokenMeta": {
+        "decimals": 18,
+        "symbol": "PCOCK",
+        "name": "PulseChain Peacock"
+      },
+      "vaultState": {
+        "nextTokenId": "2",
+        "lastEntryTimestamp": "1759620965",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "1"
+      },
+      "db": {
+        "entryFee": 5555,
+        "receipt": "0x6655d72a67e7a2d143246f8a50adaa1e57173ac8"
+      }
+    },
+    {
+      "id": "manual-puma-3x3",
+      "chainId": 369,
+      "tokenName": "PuMa 3x3",
+      "tokenAddress": "0xbc2C3D958b858E044A1d99875b276c56C5d07E36",
+      "resolvedTokenAddress": "0xbc2C3D958b858E044A1d99875b276c56C5d07E36",
+      "vault": "0xF2fF86e9478200DF100D0A1152a8732D972831c9",
+      "entryFee": {
+        "wei": "369000000000000000000",
+        "formatted": "369.000000"
+      },
+      "payout": {
+        "wei": "2049795000000000000000",
+        "formatted": "2049.795000"
+      },
+      "vaultBalance": {
+        "wei": "14804833500000000000000",
+        "formatted": "14804.833500"
+      },
+      "tokenMeta": {
+        "decimals": 18,
+        "symbol": "PUMA",
+        "name": "PUMA"
+      },
+      "vaultState": {
+        "nextTokenId": "140",
+        "lastEntryTimestamp": "1759768675",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "124"
+      },
+      "db": {
+        "entryFee": null,
+        "receipt": "0x0426e270d1DE6c4f7f52b2753C2bBbC6773004cf"
+      }
+    },
+    {
+      "id": "manual-puma-4x4",
+      "chainId": 369,
+      "tokenName": "PuMa 4x4",
+      "tokenAddress": "0xbc2C3D958b858E044A1d99875b276c56C5d07E36",
+      "resolvedTokenAddress": "0xbc2C3D958b858E044A1d99875b276c56C5d07E36",
+      "vault": "0x4E893c22fd469b3Fc343cfC1d8A9F7ddd64B16d0",
+      "entryFee": {
+        "wei": "555500000000000000000",
+        "formatted": "555.500000"
+      },
+      "payout": {
+        "wei": "30858025000000000000000",
+        "formatted": "30858.025000"
+      },
+      "vaultBalance": {
+        "wei": "37774000000000000000000",
+        "formatted": "37774.000000"
+      },
+      "tokenMeta": {
+        "decimals": 18,
+        "symbol": "PUMA",
+        "name": "PUMA"
+      },
+      "vaultState": {
+        "nextTokenId": "69",
+        "lastEntryTimestamp": "1759764515",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "68"
+      },
+      "db": {
+        "entryFee": null,
+        "receipt": "0x8E4d176bb0E7B32103fA60e880614441aDe701F9"
+      }
+    }
+  ]
+}
