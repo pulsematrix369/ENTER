@@ -677,24 +677,6 @@
 </head>
 <body>
   <!-- Simple network toggle: choose read network independent of wallet for accurate code checks -->
-  <script>
-    (function(){
-      try{
-        // Default to FAQ on first load if there is no hash/bookmark
-        if(!location.hash){
-          history.replaceState(null,'','#page=faq');
-        }
-        // Respect explicit hashes (bookmarks). If hash becomes empty unexpectedly, restore FAQ.
-        window.addEventListener('hashchange', function(){
-          try{
-            if(!location.hash){
-              history.replaceState(null,'','#page=faq');
-            }
-          }catch(_e){}
-        });
-      }catch(_e){}
-    })();
-  </script>
   <div id="read-net-toggle" style="position:fixed;top:8px;right:10px;z-index:9999;display:flex;gap:6px;font-family:monospace;">
     <button id="btn-testnet" style="padding:6px 10px;border-radius:8px;border:1px solid #0f0;background:#000;color:#0f0;cursor:pointer;transition:all .2s ease;">Testnet V4</button>
     <button id="btn-mainnet" style="padding:6px 10px;border-radius:8px;border:1px solid #0f0;background:#000;color:#0f0;cursor:pointer;transition:all .2s ease;">MainNet</button>
@@ -1002,13 +984,50 @@
         .replace(/[^a-z0-9]+/g,'-')
         .replace(/^-|-$/g,'');
     }
+    const FAQ_SLUG = slugifyToken(FAQ_NAME);
+    const HASH_ALIAS_MAP = {
+      [FAQ_SLUG]: FAQ_SLUG,
+      faq: FAQ_SLUG,
+      documentation: FAQ_SLUG,
+      docs: FAQ_SLUG
+    };
+    function normalizePageSlug(slug){
+      if (!slug) return '';
+      const key = String(slug).toLowerCase();
+      return HASH_ALIAS_MAP[key] || key;
+    }
+    function toHashSlug(slug){
+      if (!slug) return '';
+      return slug === FAQ_SLUG ? 'faq' : slug;
+    }
+    function setHashToSlug(slug){
+      try {
+        const finalSlug = toHashSlug(slug);
+        const desired = '#page=' + finalSlug;
+        if (window.location.hash !== desired) history.replaceState(null, '', desired);
+      } catch {}
+    }
     function getIndexFromHash(){
       const m = window.location.hash.match(/page=([^&]+)/i);
       if(!m) return DEFAULT_INDEX;
-      const wanted = m[1].toLowerCase();
+      let raw = m[1];
+      try { raw = decodeURIComponent(raw); } catch {}
+      const wanted = normalizePageSlug(raw);
       const idx = tokens.findIndex(t => slugifyToken(t.name) === wanted);
       return idx >= 0 ? idx : DEFAULT_INDEX;
     }
+
+    try {
+      if (!window.__FAQ_HASH_CANON) {
+        window.__FAQ_HASH_CANON = true;
+        if (!window.location.hash) setHashToSlug(FAQ_SLUG);
+        window.addEventListener('hashchange', function(){
+          try {
+            if (!window.location.hash) setHashToSlug(FAQ_SLUG);
+          } catch {}
+        });
+      }
+    } catch {}
 
     // ===== ADD TO METAMASK FUNCTION  =====
     async function addTokenToMetaMask(tokenConfig) {
@@ -1317,6 +1336,7 @@
           'HEX': 'pHEX.png',
           'EHEX': 'eHEX.png',
           'PWBTC': 'pWBTC.png',
+          'WBTC': 'wBTC.png',
           // Test tokens (t*)
           'TPLS': 'tPLS.png',
           'TPLSX': 'tPLSX.png',
@@ -1328,6 +1348,7 @@
           'WETH': 'ETH.png',
           'DAI_MAIN': 'DAI.png', // alias to avoid matching PDAI; not searched directly
           // Ecosystem extras you have in Pics/
+          'SCIVIVE': 'sciViVe.png',
           'PLSD': 'plsd.png',
           'HDRN': 'hdrn.png',
           'MAXI': 'maxi.png',
@@ -1344,7 +1365,10 @@
           'BEAR': 'bear.png',
           'LIBERTY': 'liberty.png',
           'PUMP': 'pump.png',
-          'MOST': 'most.png'
+          'MOST': 'most.png',
+          '9inch': '9inch.png',
+          'DWB': 'DWB.png',
+          'PCOCK': 'pCOCK.png'
         };
         // Resolve an image path from symbol/name to an absolute URL usable by MetaMask and the UI.
         function resolveTokenImage(symbol, name){
@@ -1508,7 +1532,7 @@
     if (v && v !== stickyVault) setStickyVault(v);
         // If user leaves FAQ, disable the default page lock
         try {
-          if (slug && slug !== slugifyToken('Comprehensive Documentation & FAQ')) {
+          if (slug && slug !== FAQ_SLUG) {
             defaultPageLockRef.current = false;
           }
         } catch {}
@@ -1521,7 +1545,12 @@
       try {
         if (freezeSel) return; // don't alter selection mid-transaction
         const m = window.location.hash.match(/page=([^&]+)/i);
-        const hasExplicitHash = !!(m && m[1]);
+        let rawSlug = '';
+        if (m && m[1]) {
+          rawSlug = m[1];
+          try { rawSlug = decodeURIComponent(rawSlug); } catch {}
+        }
+        const hasExplicitHash = !!rawSlug;
         // While no explicit hash and user hasn't navigated yet, pin to FAQ to avoid jitter on async refresh
         if (!hasExplicitHash && defaultPageLockRef.current) {
           const faqIdx = tokens.findIndex(t => t && t.name === 'Comprehensive Documentation & FAQ');
@@ -1534,8 +1563,8 @@
           ? slugifyToken(tokens[carouselIdx].name)
           : '';
         // Resolve desired target (prefer sticky slug to survive token reorders)
-        const wantedSlug = m && m[1]
-          ? m[1].toLowerCase()
+        const wantedSlug = rawSlug
+          ? normalizePageSlug(rawSlug)
           : (initLock ? '' : (stickySlug || currentSlug));
         let idx = -1;
         if (wantedSlug) {
@@ -1548,9 +1577,9 @@
           if (vaultKey) idx = tokens.findIndex(t => String(t?.config?.vault || '').toLowerCase() === vaultKey);
         }
         // If we are on FAQ and no explicit hash, do not auto-switch on background token updates
-        const isFAQ = (tokens[carouselIdx] && tokens[carouselIdx].name === 'Comprehensive Documentation & FAQ');
+        const isFAQ = (tokens[carouselIdx] && slugifyToken(tokens[carouselIdx].name) === FAQ_SLUG);
         if (idx >= 0 && idx !== carouselIdx) {
-          if (isFAQ && !hasExplicitHash && stickySlug === slugifyToken('Comprehensive Documentation & FAQ')) {
+          if (isFAQ && !hasExplicitHash && stickySlug === FAQ_SLUG) {
             // stay on FAQ
           } else {
             setCarouselIdx(idx);
@@ -3297,7 +3326,7 @@
                 try{
                   setFreezeSel(true);
                   // Pin URL hash to current page to keep selection stable through refreshes
-                  try{ const slug = slugifyToken(tokens[carouselIdx].name); const desired = '#page='+slug; if(window.location.hash!==desired) history.replaceState(null,'',desired);}catch{}
+                  try{ const slug = slugifyToken(tokens[carouselIdx].name); setHashToSlug(slug); }catch{}
                   const provider=new ethers.providers.Web3Provider(window.ethereum);
                   const signer=provider.getSigner();
                   // Prefer the token address declared by the vault on-chain; fallback to cfg.token if unavailable on this network
@@ -3326,7 +3355,7 @@
                 try{
                   setFreezeSel(true);
                   // Pin URL hash to current page to keep selection stable through refreshes
-                  try{ const slug = slugifyToken(tokens[carouselIdx].name); const desired = '#page='+slug; if(window.location.hash!==desired) history.replaceState(null,'',desired);}catch{}
+                  try{ const slug = slugifyToken(tokens[carouselIdx].name); setHashToSlug(slug); }catch{}
                   const provider=new ethers.providers.Web3Provider(window.ethereum);
                   const signer=provider.getSigner();
                   const vault=new ethers.Contract(cfg.vault,window.AllVaultABI[cfg.abiKey],signer);
@@ -3449,10 +3478,7 @@
                     if (!allRoot) return; // Only guard while ALL is actually mounted
                     if (window.__ALLOW_HASH_NAV) { window.__ALLOW_HASH_NAV = false; return; }
                     const slug = (typeof slugifyToken === 'function') ? slugifyToken('ALL') : 'all';
-                    const desired = '#page=' + slug;
-                    if (window.location.hash !== desired) {
-                      history.replaceState(null, '', desired);
-                    }
+                    setHashToSlug(slug);
                   } catch {}
                 }, true);
               }
@@ -3460,9 +3486,9 @@
             // Nudge hash to #page=all without hooks to reduce bookmark-snap glitches
             try {
               const slug = (typeof slugifyToken === 'function') ? slugifyToken('ALL') : 'all';
-              const desired = '#page=' + slug;
+              const desired = '#page=' + toHashSlug(slug);
               if (window.location && window.location.hash !== desired) {
-                setTimeout(() => { try { if (window.location.hash !== desired) history.replaceState(null, '', desired); } catch {} }, 0);
+                setTimeout(() => { try { setHashToSlug(slug); } catch {} }, 0);
               }
             } catch {}
             function baseSym(name){ return String(name||'').replace(/\s*(?:3x3|4x4|3×3|4×4)\b/gi,'').trim().toUpperCase(); }
@@ -3862,7 +3888,7 @@
                         <td
                           style={{padding:'8px 10px', cursor:'pointer', textDecoration:'none', color:'#9f9'}}
                           title="Open token page"
-                          onClick={() => { try { setCarouselIdx(originalIdx); } catch {} try { const slug = typeof slugifyToken==='function'? slugifyToken(token.name):null; if (slug) { try { window.__ALLOW_HASH_NAV = true; } catch {} history.replaceState(null,'','#page='+slug); setTimeout(()=>{ try { window.__ALLOW_HASH_NAV = false; } catch {} }, 250); } } catch {} }}
+                          onClick={() => { try { setCarouselIdx(originalIdx); } catch {} try { const slug = typeof slugifyToken==='function'? slugifyToken(token.name):null; if (slug) { try { window.__ALLOW_HASH_NAV = true; } catch {} setHashToSlug(slug); setTimeout(()=>{ try { window.__ALLOW_HASH_NAV = false; } catch {} }, 250); } } catch {} }}
                         >
                           {token.name}
                           <span
@@ -4027,11 +4053,11 @@
                             <>
             <img src="Pics/card.png" alt="Cards" title="Cards"
               data-no-nav
-              onClick={(e)=>{ try{ e.preventDefault && e.preventDefault(); e.stopPropagation && e.stopPropagation(); }catch{}; try{ const slug = (typeof slugifyToken==='function')? slugifyToken('ALL') : 'all'; history.replaceState(null,'','#page='+slug); }catch{}; try { window.__ALLOW_HASH_NAV = false; } catch {}; setAllViewMode('cards'); }}
+              onClick={(e)=>{ try{ e.preventDefault && e.preventDefault(); e.stopPropagation && e.stopPropagation(); }catch{}; try{ const slug = (typeof slugifyToken==='function')? slugifyToken('ALL') : 'all'; setHashToSlug(slug); }catch{}; try { window.__ALLOW_HASH_NAV = false; } catch {}; setAllViewMode('cards'); }}
               style={baseImg} />
             <img src="Pics/table.png" alt="Table" title="Table"
               data-no-nav
-              onClick={(e)=>{ try{ e.preventDefault && e.preventDefault(); e.stopPropagation && e.stopPropagation(); }catch{}; try{ const slug = (typeof slugifyToken==='function')? slugifyToken('ALL') : 'all'; history.replaceState(null,'','#page='+slug); }catch{}; try { window.__ALLOW_HASH_NAV = false; } catch {}; setAllViewMode('table'); }}
+              onClick={(e)=>{ try{ e.preventDefault && e.preventDefault(); e.stopPropagation && e.stopPropagation(); }catch{}; try{ const slug = (typeof slugifyToken==='function')? slugifyToken('ALL') : 'all'; setHashToSlug(slug); }catch{}; try { window.__ALLOW_HASH_NAV = false; } catch {}; setAllViewMode('table'); }}
               style={baseImg} />
                             </>
                           );
@@ -4184,7 +4210,7 @@
             async function handleApprove() {
                           try {
               setFreezeSel(true);
-              try { const slug = slugifyToken(tokens[carouselIdx].name); const desired = '#page=' + slug; if (window.location.hash !== desired) history.replaceState(null, '', desired); } catch {}
+              try { const slug = slugifyToken(tokens[carouselIdx].name); setHashToSlug(slug); } catch {}
                             if (!window.ethereum) { setTxMsg('No wallet found.'); return; }
                             if (!cfg?.token || !cfg?.vault) { setTxMsg('Config error.'); return; }
                             const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -4250,7 +4276,7 @@
             async function handleJoin() {
                           try {
                             setFreezeSel(true);
-                            try { const slug = slugifyToken(tokens[carouselIdx].name); const desired = '#page=' + slug; if (window.location.hash !== desired) history.replaceState(null, '', desired); } catch {}
+                            try { const slug = slugifyToken(tokens[carouselIdx].name); setHashToSlug(slug); } catch {}
                             if (!window.ethereum) { setTxMsg('No wallet found.'); return; }
                             if (!cfg?.vault) { setTxMsg('Config error.'); return; }
                             const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -5154,13 +5180,11 @@
         try {
           const currentSlug = slugifyToken(tokens[carouselIdx].name);
           const m = window.location.hash.match(/page=([^&]+)/i);
-          const hashSlug = m && m[1] ? m[1].toLowerCase() : null;
+          const rawSlug = m && m[1] ? m[1] : null;
+          const hashSlug = normalizePageSlug(rawSlug);
           // If a hash exists and does NOT match the current selection, do not overwrite it here
           if (hashSlug && hashSlug !== currentSlug) return;
-          const desired = '#page=' + currentSlug;
-          if (window.location.hash !== desired) {
-            history.replaceState(null, '', desired);
-          }
+          setHashToSlug(currentSlug);
         } catch {}
       }, [carouselIdx, tokens]);
 
@@ -5170,7 +5194,7 @@
           try {
             const m = window.location.hash.match(/page=([^&]+)/i);
             const slug = m && m[1] ? m[1].toLowerCase() : '';
-            if (slug && slug !== slugifyToken('Comprehensive Documentation & FAQ')) {
+            if (slug && slug !== FAQ_SLUG) {
               defaultPageLockRef.current = false;
             }
           } catch {}
