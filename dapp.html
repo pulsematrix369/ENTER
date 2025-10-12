@@ -1368,8 +1368,8 @@
           'MOST': 'most.png',
           '9inch': '9inch.png',
           'DWB': 'DWB.png',
-          'fart': 'FART.png',
-          'DORRA': 'DORRA.png',
+          'FART': 'fart.png',
+          'DORRA': 'dorra.png',
           'PCOCK': 'pCOCK.png'
         };
         // Resolve an image path from symbol/name to an absolute URL usable by MetaMask and the UI.
@@ -2144,12 +2144,10 @@
                 if (!isClosed) {
                   let fill;
                   if (vpIndex === firstOpenIdx) {
-                    // Active VP: baseline + real progress (include any joins after the baseline)
+                    // Active VP: rely on prefill count (already includes post-paypoint joins) and clamp to structure size
                     const prefillAmount = computePrefilledForLeaderIndex(vpIndex, totalCurrentEntries, lastEOLTriggerEntry, matrixSize);
-                    // Compute leftover joins since the previous paypoint (this yields the 'extra' entries filling the active VP)
-                    const prevPayPoint = getVPPaymentPointByIndex(vpIndex - 1, matrixSize, lastEOLTriggerEntry);
-                    const leftover = Math.max(0, totalCurrentEntries - prevPayPoint);
-                    fill = Math.max(prefillAmount, baseline) + leftover;
+                    const adjustedPrefill = Math.max(prefillAmount, baseline);
+                    fill = Math.min(adjustedPrefill, structureSize);
                   } else {
                     // Future VPs: exact baseline only
                     fill = baseline;
@@ -2281,9 +2279,8 @@
                   let fill;
                   if (vpIndex === firstOpenIdx) {
                     const prefillAmount = computePrefilledForLeaderIndex(vpIndex, totalCurrentEntries, lastEOLTriggerEntry, matrixSize);
-                    const rawFills = computeVPFilledByIndex ? computeVPFilledByIndex(vpIndex, totalCurrentEntries, matrixSize, lastEOLTriggerEntry) : 0;
-                    const additionalFills = Math.max(0, rawFills - baseline);
-                    fill = Math.max(prefillAmount, baseline) + additionalFills;
+                    const adjustedPrefill = Math.max(prefillAmount, baseline);
+                    fill = Math.min(adjustedPrefill, structureSize);
                   } else {
                     fill = baseline;
                   }
@@ -3290,16 +3287,15 @@
                 let openVPFill = 0;
                 let activeWork = 0; // entries beyond baseline currently filling the active VP
                 if (firstOpenIdx !== null) {
-                  // Compute fill: before VP#1 pays use raw fill (baseline = 0), after use prefill plus any joins beyond baseline
+                  // Compute fill: before VP#1 pays use raw fill (baseline = 0); afterwards rely on prefill output (already includes post-paypoint joins)
                   if (!vp1Complete) {
                     openVPFill = computeVPFilledByIndex(firstOpenIdx, totalEntriesMade, matrixSize, lastEOLTriggerEntry);
                     activeWork = Math.max(0, openVPFill); // baseline is 0 before VP#1 completes
                   } else {
                     const prefillAmount = computePrefilledForLeaderIndex(firstOpenIdx, totalEntriesMade, lastEOLTriggerEntry, matrixSize);
                     // Compute leftover joins since the previous paypoint for this VP (works for 3x3 and 4x4)
-                    const prevPayPoint = getVPPaymentPointByIndex(firstOpenIdx - 1, matrixSize, lastEOLTriggerEntry);
-                    const leftover = Math.max(0, totalEntriesMade - prevPayPoint);
-                    openVPFill = Math.max(prefillAmount, baseline) + leftover;
+                    const adjustedPrefill = Math.max(prefillAmount, baseline);
+                    openVPFill = Math.min(adjustedPrefill, structureSize);
                     activeWork = Math.max(0, openVPFill - baseline);
                   }
                 } else {
@@ -3446,8 +3442,8 @@
                     // 3-color segmentation for clearer aging: green | orange(3-day band) | red tail
                     const d = Math.max(0, Math.min(36, Number(daysSince||0)));
                     const total = 37;
-                    const redLen = Math.max(0, d - 3);
-                    const orangeLen = Math.min(3, d);
+                    const redLen = Math.max(0, d - 30);
+                    const orangeLen = Math.min(31, d);
                     const redStart = total - redLen;        // index where red zone starts
                     const orangeStart = redStart - orangeLen; // index where orange zone starts
                     let bg = 'hsl(120,80%,45%)'; // green
@@ -3536,20 +3532,34 @@
                 return null;
               }
               (async () => {
-                // Limit concurrent loads to avoid flooding
-                let started = 0;
-                for (const {token} of list) {
+                const queue = [];
+                for (const { token } of list) {
                   const cfg = token.config;
                   const key = cfg && cfg.vault;
                   if (!key) continue;
-                  if (cache[key] == null && started < 6) {
-                    started++;
-                    fetchLastEntryTs(cfg).then(ts => {
-                      if (ts != null) { try { cache[key] = ts; } catch {} }
-                      try { setRefreshStats(x=>x+1); } catch {}
-                    });
+                  const lower = String(key).toLowerCase();
+                  if (cache[key] != null || cache[lower] != null) continue;
+                  queue.push(cfg);
+                }
+                if (!queue.length) return;
+                const workers = Math.min(queue.length, 4);
+                async function pump(){
+                  while (queue.length) {
+                    const cfg = queue.shift();
+                    if (!cfg) break;
+                    try {
+                      const ts = await fetchLastEntryTs(cfg);
+                      if (ts != null) {
+                        try {
+                          cache[cfg.vault] = ts;
+                          cache[String(cfg.vault).toLowerCase()] = ts;
+                        } catch {}
+                        try { setRefreshStats(x => x + 1); } catch {}
+                      }
+                    } catch {}
                   }
                 }
+                await Promise.all(Array.from({ length: workers }, pump));
               })();
             } catch {}
 
@@ -3712,11 +3722,12 @@
                           'function allowance(address,address) view returns(uint256)'
                         ], provider);
 
-                        const [decimals, entryFeeBN, payoutBN, vBalBN] = await Promise.all([
+                        const [decimals, entryFeeBN, payoutBN, vBalBN, lastTsRaw] = await Promise.all([
                           erc20.decimals().catch(()=> cfg.decimals || 18),
                           vault.ENTRY_FEE().catch(()=> null),
                           vault.PAYOUT_AMOUNT().catch(()=> null),
-                          erc20.balanceOf(cfg.vault).catch(()=> null)
+                          erc20.balanceOf(cfg.vault).catch(()=> null),
+                          vault.lastEntryTimestamp().catch(()=> null)
                         ]);
 
                         // Basic cycle/openVP snapshot
@@ -3770,16 +3781,16 @@
                           if (!vp1Done) {
                             fill = filledByIdx ? filledByIdx(firstOpenIdx, totalEntriesMade, matrixSize, lastTrig) : 0;
                           } else {
-                            // Compute displayed fill as prefill (or baseline) plus leftover joins since previous paypoint
+                            // Prefill already accounts for joins after the previous paypoint; clamp to the VP structure size
                             const prefillAmount = prefFilled ? prefFilled(firstOpenIdx, totalEntriesMade, lastTrig, matrixSize) : baseline;
-                            const prevPayPoint = getPayPoint ? getPayPoint(firstOpenIdx - 1, matrixSize, lastTrig) : 0;
-                            const leftover = Math.max(0, totalEntriesMade - prevPayPoint);
-                            fill = Math.max(prefillAmount, baseline) + leftover;
+                            const adjustedPrefill = Math.max(prefillAmount, baseline);
+                            fill = Math.min(adjustedPrefill, sSize);
                           }
-                          healthPct = Math.max(0, Math.min(100, Math.round((Math.min(fill, sSize) / sSize) * 100)));
+                          const displayFill = Math.min(fill, sSize);
+                          healthPct = Math.max(0, Math.min(100, Math.round((displayFill / sSize) * 100)));
                           // Show only the currently filling VP as X/Size
                           try {
-                            openDisplay = `${Math.min(fill, sSize)}/${sSize}`;
+                            openDisplay = `${displayFill}/${sSize}`;
                           } catch {}
                         }
 
@@ -3798,15 +3809,29 @@
                         } catch {}
 
                         // Days since last entry (for health color aging)
-                        let ageDays = 0;
+                        let lastEntryTs = null;
                         try {
-                          const cacheTs = (window.__LastEntryCache || {})[cfg.vault];
-                          if (cacheTs) {
-                            const nowSec = Math.floor(Date.now()/1000);
-                            const elapsed = Math.max(0, nowSec - Number(cacheTs));
-                            ageDays = Math.min(36, Math.floor(elapsed / 86400));
+                          if (lastTsRaw != null) {
+                            lastEntryTs = Number(lastTsRaw.toString ? lastTsRaw.toString() : lastTsRaw);
                           }
-                        } catch {}
+                        } catch { lastEntryTs = null; }
+                        if (!Number.isFinite(lastEntryTs) || lastEntryTs <= 0) {
+                          try {
+                            const cacheTs = (window.__LastEntryCache || {})[cfg.vault];
+                            if (cacheTs != null) lastEntryTs = Number(cacheTs);
+                          } catch {}
+                        }
+                        let ageDays = 0;
+                        if (Number.isFinite(lastEntryTs) && lastEntryTs > 0) {
+                          const nowSec = Math.floor(Date.now() / 1000);
+                          const elapsed = Math.max(0, nowSec - lastEntryTs);
+                          ageDays = Math.min(36, Math.floor(elapsed / 86400));
+                          try {
+                            const cache = (window.__LastEntryCache = window.__LastEntryCache || {});
+                            cache[cfg.vault] = lastEntryTs;
+                            cache[String(cfg.vault).toLowerCase()] = lastEntryTs;
+                          } catch {}
+                        }
 
                         // Allowance check only if account is known
                         let allowance = null, approved = false;
@@ -3963,8 +3988,8 @@
                             // 3-color segmented bar (2px tall): green | orange (3-day band) | red tail
                             const d = Math.max(0, Math.min(36, Number(row.ageDays || 0)));
                             const total = 37;
-                            const redLen = Math.max(0, d - 3);
-                            const orangeLen = Math.min(3, d);
+                            const redLen = Math.max(0, d - 30);
+                            const orangeLen = Math.min(31, d);
                             const redStart = total - redLen;
                             const orangeStart = redStart - orangeLen;
                             const blocks = Array.from({ length: total });
@@ -6461,7 +6486,12 @@
             
             // Check if same token is used across matrices
             if (window.coinConfigs) {
-              const sameTokenConfigs = window.coinConfigs.filter(c => c.token === cfg.token);
+              const targetChainId = Number(cfg?.chainId ?? window.__READ_CHAIN_ID ?? window.DEFAULT_CHAIN_ID ?? 0);
+              const sameTokenConfigs = window.coinConfigs.filter(c => {
+                const matchesToken = c && c.token === cfg.token;
+                const matchesChain = Number(c?.chainId ?? window.__READ_CHAIN_ID ?? window.DEFAULT_CHAIN_ID ?? 0) === targetChainId;
+                return matchesToken && matchesChain;
+              });
               matrixInfo.sameTokenDifferentMatrix = sameTokenConfigs.length > 1;
               matrixInfo.sharedTokenConfigs = sameTokenConfigs.map(c => c.name);
             }
