@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-10-06T17:15:54.893Z",
+  "generatedAt": "2025-10-12T21:18:03.207Z",
   "source": "pulsemat_ALL_matrix.ALL",
   "matrixCount": 19,
   "items": [
@@ -19,8 +19,8 @@
         "formatted": "2049795.000000"
       },
       "vaultBalance": {
-        "wei": "2583000000000000000000000",
-        "formatted": "2583000.000000"
+        "wei": "2952000000000000000000000",
+        "formatted": "2952000.000000"
       },
       "tokenMeta": {
         "decimals": 18,
@@ -28,13 +28,13 @@
         "name": "Wrapped Pulse"
       },
       "vaultState": {
-        "nextTokenId": "8",
-        "lastEntryTimestamp": "1759586065",
+        "nextTokenId": "9",
+        "lastEntryTimestamp": "1760198735",
         "eolCycleCount": "0",
         "eolTimestamp": "0",
         "eolLastTriggerEntry": null,
         "eolActive": false,
-        "unpaidOpenEntries": "7"
+        "unpaidOpenEntries": "8"
       },
       "db": {
         "entryFee": 369000,
@@ -133,8 +133,8 @@
         "formatted": "3086108.025000"
       },
       "vaultBalance": {
-        "wei": "1666665000000000000000000",
-        "formatted": "1666665.000000"
+        "wei": "2222220000000000000000000",
+        "formatted": "2222220.000000"
       },
       "tokenMeta": {
         "decimals": 18,
@@ -142,13 +142,13 @@
         "name": "PulseX"
       },
       "vaultState": {
-        "nextTokenId": "4",
-        "lastEntryTimestamp": "1759586255",
+        "nextTokenId": "5",
+        "lastEntryTimestamp": "1760198815",
         "eolCycleCount": "0",
         "eolTimestamp": "0",
         "eolLastTriggerEntry": null,
         "eolActive": false,
-        "unpaidOpenEntries": "3"
+        "unpaidOpenEntries": "4"
       },
       "db": {
         "entryFee": 555555,
@@ -361,8 +361,8 @@
         "formatted": "308580.250000"
       },
       "vaultBalance": {
-        "wei": "1111000000000",
-        "formatted": "11110.000000"
+        "wei": "1666500000000",
+        "formatted": "16665.000000"
       },
       "tokenMeta": {
         "decimals": 8,
@@ -370,13 +370,13 @@
         "name": "HEX"
       },
       "vaultState": {
-        "nextTokenId": "3",
-        "lastEntryTimestamp": "1759360435",
+        "nextTokenId": "4",
+        "lastEntryTimestamp": "1760109415",
         "eolCycleCount": "0",
         "eolTimestamp": "0",
         "eolLastTriggerEntry": null,
         "eolActive": false,
-        "unpaidOpenEntries": "2"
+        "unpaidOpenEntries": "3"
       },
       "db": {
         "entryFee": 3690,
@@ -399,8 +399,8 @@
         "formatted": "20497.950000"
       },
       "vaultBalance": {
-        "wei": "738000000000",
-        "formatted": "7380.000000"
+        "wei": "1107000000000",
+        "formatted": "11070.000000"
       },
       "tokenMeta": {
         "decimals": 8,
@@ -408,13 +408,13 @@
         "name": "HEX from Ethereum"
       },
       "vaultState": {
-        "nextTokenId": "3",
-        "lastEntryTimestamp": "1759361235",
+        "nextTokenId": "4",
+        "lastEntryTimestamp": "1760118845",
         "eolCycleCount": "0",
         "eolTimestamp": "0",
         "eolLastTriggerEntry": null,
         "eolActive": false,
-        "unpaidOpenEntries": "2"
+        "unpaidOpenEntries": "3"
       },
       "db": {
         "entryFee": 5555,
@@ -627,8 +627,8 @@
         "formatted": "30858.025000"
       },
       "vaultBalance": {
-        "wei": "5555000000000000000000",
-        "formatted": "5555.000000"
+        "wei": "87858991000000000000000",
+        "formatted": "87858.991000"
       },
       "tokenMeta": {
         "decimals": 18,
@@ -636,13 +636,13 @@
         "name": "PulseChain Peacock"
       },
       "vaultState": {
-        "nextTokenId": "2",
-        "lastEntryTimestamp": "1759620965",
+        "nextTokenId": "30",
+        "lastEntryTimestamp": "1760037235",
         "eolCycleCount": "0",
         "eolTimestamp": "0",
         "eolLastTriggerEntry": null,
         "eolActive": false,
-        "unpaidOpenEntries": "1"
+        "unpaidOpenEntries": "27"
       },
       "db": {
         "entryFee": 5555,
@@ -665,8 +665,8 @@
         "formatted": "2049.795000"
       },
       "vaultBalance": {
-        "wei": "14804833500000000000000",
-        "formatted": "14804.833500"
+        "wei": "20505366900000000000000",
+        "formatted": "20505.366900"
       },
       "tokenMeta": {
         "decimals": 18,
@@ -674,13 +674,13 @@
         "name": "PUMA"
       },
       "vaultState": {
-        "nextTokenId": "140",
-        "lastEntryTimestamp": "1759768675",
+        "nextTokenId": "195",
+        "lastEntryTimestamp": "1760291525",
         "eolCycleCount": "0",
         "eolTimestamp": "0",
         "eolLastTriggerEntry": null,
         "eolActive": false,
-        "unpaidOpenEntries": "124"
+        "unpaidOpenEntries": "173"
       },
       "db": {
         "entryFee": null,
@@ -703,8 +703,8 @@
         "formatted": "30858.025000"
       },
       "vaultBalance": {
-        "wei": "37774000000000000000000",
-        "formatted": "37774.000000"
+        "wei": "34670477050000000000000",
+        "formatted": "34670.477050"
       },
       "tokenMeta": {
         "decimals": 18,
@@ -712,13 +712,13 @@
         "name": "PUMA"
       },
       "vaultState": {
-        "nextTokenId": "69",
-        "lastEntryTimestamp": "1759764515",
+        "nextTokenId": "122",
+        "lastEntryTimestamp": "1760291175",
         "eolCycleCount": "0",
         "eolTimestamp": "0",
         "eolLastTriggerEntry": null,
         "eolActive": false,
-        "unpaidOpenEntries": "68"
+        "unpaidOpenEntries": "120"
       },
       "db": {
         "entryFee": null,
