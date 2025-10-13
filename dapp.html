@@ -1150,50 +1150,24 @@
     // - 3x3: leaders 2..4 each get leader(1) + 3 children chunks: [5..7], [8..10], [11..13]
     // - 4x4: leaders 2..5 each get leader(1) + 4 children [6..21 chunked by 4] + 16 grandchildren [22..85 chunked by 16]
     function computePrefilledForLeaderIndex(vpIndex, totalEntriesAbs, lastEOLTriggerEntry = 0, matrixSize = 3) {
-      // vpIndex is 1-based within cycle; leader absolute tokenId is base + vpIndex
-      const base = getCycleBase(lastEOLTriggerEntry);
-      const leaderId = base + vpIndex;
-      let filled = mintedInRange(totalEntriesAbs, leaderId, leaderId); // leader itself
+      const size = Number(matrixSize) === 4 ? 4 : 3;
+      const structureSize = getVPStructureSize(size);
+      const index = Math.max(1, Number(vpIndex || 0));
 
-      if (matrixSize === 3) {
-        // Initial prefill inside VP#1 (ids 1..13): distribute children among vpIndex 2..4
-        if (vpIndex >= 2 && vpIndex <= 4) {
-          const chunkStart = base + 5 + (vpIndex - 2) * 3; // 5..7, 8..10, 11..13
-          const chunkEnd = chunkStart + 2;
-          filled += mintedInRange(totalEntriesAbs, chunkStart, chunkEnd);
-        }
-        // After VP#1 completes (base+s), new entries fill the next leaders sequentially in +9 blocks
-        const s = getVPStructureSize(3);
-        const mintedAfter = Math.max(0, totalEntriesAbs - (base + s));
-        if (mintedAfter > 0 && vpIndex >= 2 && vpIndex <= 4) {
-          const offsetBlocks = vpIndex - 2; // 0 for VP#2, 1 for VP#3, 2 for VP#4
-          const taken = Math.max(0, Math.min(9, mintedAfter - (offsetBlocks * 9)));
-          filled += taken;
-        }
-      } else {
-        // 4x4: leaders 2..5; add L3 (4 each) and L4 (16 each)
-        if (vpIndex >= 2 && vpIndex <= 5) {
-          // Level 3: 6..21 partitioned into 4 chunks of 4
-          const l3Start = base + 6 + (vpIndex - 2) * 4;
-          const l3End = l3Start + 3;
-          filled += mintedInRange(totalEntriesAbs, l3Start, l3End);
-          // Level 4: 22..85 partitioned into 4 chunks of 16
-          const l4Start = base + 22 + (vpIndex - 2) * 16;
-          const l4End = l4Start + 15;
-          filled += mintedInRange(totalEntriesAbs, l4Start, l4End);
-          // After VP#1 completes (base+s), new entries fill the next leaders sequentially in +64 blocks
-          const s = getVPStructureSize(4);
-          const mintedAfter = Math.max(0, totalEntriesAbs - (base + s));
-          const offsetBlocks = vpIndex - 2; // 0..3
-          if (mintedAfter > 0) {
-            const taken = Math.max(0, Math.min(64, mintedAfter - (offsetBlocks * 64)));
-            filled += taken;
-          }
-          // Display expectation: show children-only count; exclude leader itself
-          if (filled > 0) filled -= 1;
-        }
+      // VP#1: fall back to raw fill inside its own structure window
+      if (index === 1) {
+        const fill = computeVPFilledByIndex(1, totalEntriesAbs, size, lastEOLTriggerEntry);
+        return Math.min(structureSize, fill);
       }
-      return filled;
+
+      const baseline = size === 4 ? 20 : 4;
+      const spacing = getPaySpacing(size);
+      const prevPayPoint = getVPPaymentPointByIndex(index - 1, size, lastEOLTriggerEntry);
+      const mintedSincePrev = Math.max(0, totalEntriesAbs - prevPayPoint);
+      const extraWork = Math.min(spacing, mintedSincePrev);
+      const fill = baseline + extraWork;
+
+      return Math.min(structureSize, fill);
     }
 
     // Determine if a VP (by index within cycle) is complete based on payment point
