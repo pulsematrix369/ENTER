@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-10-12T21:18:03.207Z",
+  "generatedAt": "2025-10-13T14:10:55.791Z",
   "source": "pulsemat_ALL_matrix.ALL",
   "matrixCount": 19,
   "items": [
@@ -665,8 +665,8 @@
         "formatted": "2049.795000"
       },
       "vaultBalance": {
-        "wei": "20505366900000000000000",
-        "formatted": "20505.366900"
+        "wei": "21243366900000000000000",
+        "formatted": "21243.366900"
       },
       "tokenMeta": {
         "decimals": 18,
@@ -674,13 +674,13 @@
         "name": "PUMA"
       },
       "vaultState": {
-        "nextTokenId": "195",
-        "lastEntryTimestamp": "1760291525",
+        "nextTokenId": "197",
+        "lastEntryTimestamp": "1760326385",
         "eolCycleCount": "0",
         "eolTimestamp": "0",
         "eolLastTriggerEntry": null,
         "eolActive": false,
-        "unpaidOpenEntries": "173"
+        "unpaidOpenEntries": "175"
       },
       "db": {
         "entryFee": null,
@@ -703,8 +703,8 @@
         "formatted": "30858.025000"
       },
       "vaultBalance": {
-        "wei": "34670477050000000000000",
-        "formatted": "34670.477050"
+        "wei": "35225977050000000000000",
+        "formatted": "35225.977050"
       },
       "tokenMeta": {
         "decimals": 18,
@@ -712,13 +712,13 @@
         "name": "PUMA"
       },
       "vaultState": {
-        "nextTokenId": "122",
-        "lastEntryTimestamp": "1760291175",
+        "nextTokenId": "123",
+        "lastEntryTimestamp": "1760326565",
         "eolCycleCount": "0",
         "eolTimestamp": "0",
         "eolLastTriggerEntry": null,
         "eolActive": false,
-        "unpaidOpenEntries": "120"
+        "unpaidOpenEntries": "121"
       },
       "db": {
         "entryFee": null,
