@@ -198,7 +198,7 @@
 
       loadPrefetchedMatrices();
     })();
-    // Fetch public matrices from Google Sheets API and merge into window.coinConfigs (with polling + cache + optional CF fallback)
+  // Fetch matrices directly from the database API and merge into window.coinConfigs (with polling + cache + optional CF fallback)
     (function(){
       const toDec = x=>{try{return typeof x==='string'&&x.startsWith('0x')?parseInt(x,16):Number(x)||null;}catch{return null}};
       async function detectChainId(){
@@ -207,7 +207,25 @@
         if(!cid) cid = Number(localStorage.getItem('FACTORY_SELECTED_CHAIN')) || (window.DEFAULT_CHAIN_ID?Number(window.DEFAULT_CHAIN_ID):369);
         return cid;
       }
-      const API = (function(){ try { return window.MATRICES_API_URL || localStorage.getItem('MATRICES_API_URL') || 'https://script.google.com/macros/s/AKfycbyEyspSK4xDspCjOnbacvtqIVER9Di9m2zHw4go3y46rr0AZlTrc8Lg-HgVCApQbP0L_Q/exec'; } catch { return 'https://script.google.com/macros/s/AKfycbyEyspSK4xDspCjOnbacvtqIVER9Di9m2zHw4go3y46rr0AZlTrc8Lg-HgVCApQbP0L_Q/exec'; } })();
+      const API = (function(){
+        try {
+          let candidate = window.MATRICES_API_URL || localStorage.getItem('MATRICES_API_URL');
+          if (candidate && /script\.google\.com/i.test(candidate)) {
+            candidate = '';
+          }
+          if (candidate && /register-matrix\.php/i.test(candidate)) {
+            candidate = '';
+          }
+          if (candidate) return candidate;
+          const loc = typeof window !== 'undefined' ? window.location : null;
+          if (loc && /^https?:$/i.test(loc.protocol || '') && (loc.hostname || '').match(/(^|\.)pulsematrix\.app$/i)) {
+            return '/api/list-matrices.php';
+          }
+          return 'https://pulsematrix.app/api/list-matrices.php';
+        } catch {
+          return 'https://pulsematrix.app/api/list-matrices.php';
+        }
+      })();
       const CF_API = (function(){ try { return window.MATRICES_CF_API_URL || localStorage.getItem('MATRICES_CF_API_URL') || ''; } catch { return ''; } })();
       async function tryJson(url){ try{ const r=await fetch(url,{ cache:'no-cache' }); return await r.json(); }catch{return null;} }
       function tryJsonp(url){
@@ -226,11 +244,15 @@
       function saveCache(cid,data){ try{ localStorage.setItem(cacheKey(cid), JSON.stringify({ t: Date.now(), data })); }catch{} }
       async function loadOnce(){
         const cid = window.__READ_CHAIN_ID || await detectChainId();
-        let res = await tryJson(API + '?chainId=' + cid);
-        let serverItems = Array.isArray(res) ? res : (res && Array.isArray(res.items) ? res.items : null);
-        if(!Array.isArray(serverItems) || serverItems.length===0){
-          const jp = await tryJsonp(API + '?chainId=' + cid);
-          serverItems = Array.isArray(jp) ? jp : (jp && Array.isArray(jp.items) ? jp.items : null);
+        const apiUrl = API && API.trim().length ? API : null;
+        let serverItems = null;
+        if (apiUrl) {
+          let res = await tryJson(apiUrl + '?chainId=' + cid);
+          serverItems = Array.isArray(res) ? res : (res && Array.isArray(res.items) ? res.items : null);
+          if(!Array.isArray(serverItems) || serverItems.length===0){
+            const jp = await tryJsonp(apiUrl + '?chainId=' + cid);
+            serverItems = Array.isArray(jp) ? jp : (jp && Array.isArray(jp.items) ? jp.items : null);
+          }
         }
         if((!Array.isArray(serverItems) || serverItems.length===0) && CF_API){
           const cf = await tryJson(CF_API + (CF_API.includes('?')?'&':'?') + 'chainId=' + cid);
@@ -730,6 +752,9 @@
       const mainBtn = document.getElementById('btn-mainnet');
       if (testBtn) testBtn.onclick = async ()=> { await setReadChain(943); };
       if (mainBtn) mainBtn.onclick = async ()=> { await setReadChain(369); };
+      window.addEventListener('readChainChanged', () => {
+        try { paintActive(); } catch {}
+      });
       paintActive();
     })();
   </script>
@@ -1204,6 +1229,17 @@
           if (typeof window.setAccount === 'function') {
             window.setAccount(accounts[0]);
           }
+          try {
+            const chainHex = await window.ethereum.request({ method: 'eth_chainId' });
+            const numeric = (typeof chainHex === 'string' && chainHex.trim().startsWith('0x'))
+              ? parseInt(chainHex, 16)
+              : Number(chainHex);
+            if (Number.isFinite(numeric)) {
+              window.__READ_CHAIN_ID = numeric;
+              try { localStorage.setItem('READ_CHAIN_ID', String(numeric)); } catch {}
+              try { window.dispatchEvent(new CustomEvent('readChainChanged', { detail: { chainId: numeric, source: 'wallet' } })); } catch {}
+            }
+          } catch {}
           return true;
         }
         return false;
@@ -1580,6 +1616,7 @@
   // Tiny in-memory caches to smooth carousel scrolling
   const statsCacheRef = React.useRef(new Map()); // key: vaultAddr -> { t, stats, data }
   const openCacheRef  = React.useRef(new Map()); // key: vaultAddr -> { t, open }
+  const lastReadChainRef = React.useRef(null);
 
   // Cache housekeeping: sweep stale entries and cap size for long sessions
   React.useEffect(() => {
@@ -1612,6 +1649,25 @@
   React.useEffect(() => {
     try { statsCacheRef.current.clear(); openCacheRef.current.clear(); } catch {}
   }, [account, chainId]);
+
+  React.useEffect(() => {
+    if (chainId == null) return;
+    let numeric = null;
+    if (typeof chainId === 'string') {
+      const trimmed = chainId.trim();
+      if (!trimmed) return;
+      numeric = trimmed.startsWith('0x') ? parseInt(trimmed, 16) : Number(trimmed);
+    } else if (typeof chainId === 'number') {
+      numeric = Number(chainId);
+    }
+    if (!Number.isFinite(numeric)) return;
+    const currentRead = Number(window.__READ_CHAIN_ID || window.DEFAULT_CHAIN_ID || 0);
+    if (lastReadChainRef.current === numeric && currentRead === numeric) return;
+    lastReadChainRef.current = numeric;
+    try { window.__READ_CHAIN_ID = numeric; localStorage.setItem('READ_CHAIN_ID', String(numeric)); } catch {}
+    try { window.dispatchEvent(new CustomEvent('readChainChanged', { detail: { chainId: numeric, source: 'wallet' } })); } catch {}
+    setRefreshStats(x => x + 1);
+  }, [chainId]);
   // When coinConfigs are updated (from Sheets loader), force a re-render so ALL card recomputes extras
   React.useEffect(() => {
     function onCoinConfigsReady(e){
@@ -1670,6 +1726,10 @@
           
           if (accounts && accounts.length > 0) {
             setAccount(accounts[0]);
+            try {
+              const chainHex = await window.ethereum.request({ method: 'eth_chainId' });
+              setChainId(chainHex);
+            } catch {}
             setTxMsg('Wallet connected!');
             setTimeout(() => setTxMsg(''), 2000); // Clear message after 2 seconds
           } else {
@@ -1810,11 +1870,56 @@
               return;
             }
             const cacheKey = String(config.vault||'').toLowerCase();
+
+            // Optional prefetched snapshot (keeps UI aligned with DB/indexer output)
+            const prefetchedStore = window.__prefetchedMatrixStats && window.__prefetchedMatrixStats.byVault;
+            let prefetchedEntry = null;
+            if (prefetchedStore && typeof prefetchedStore.get === 'function') {
+              try { prefetchedEntry = prefetchedStore.get(cacheKey); } catch {}
+            }
+            const desiredChain = Number(window.__READ_CHAIN_ID || window.DEFAULT_CHAIN_ID || 943);
+            const prefChain = prefetchedEntry
+              ? Number(
+                  prefetchedEntry.sourceRow?.chainId ??
+                  prefetchedEntry.sourceRow?.chainID ??
+                  prefetchedEntry.chainId ??
+                  prefetchedEntry.db?.chainId ??
+                  prefetchedEntry.sourceRow?.db?.chainId ?? 0
+                )
+              : null;
+            const prefTotals = (prefetchedEntry && prefChain === desiredChain)
+              ? (function extractPrefetchedTotals(entry) {
+                  try {
+                    const fromDerived = entry.sourceRow?.derived?.vp?.totalEntries;
+                    if (fromDerived != null) return Number(fromDerived);
+                    const nextToken = entry.sourceRow?.vaultState?.nextTokenId ?? entry.vaultState?.nextTokenId;
+                    if (nextToken != null) {
+                      const nextNum = Number(nextToken);
+                      if (Number.isFinite(nextNum)) return Math.max(0, nextNum - 1);
+                    }
+                    return null;
+                  } catch { return null; }
+                })(prefetchedEntry)
+              : null;
+
             // Serve cached values if fresh (<=10s)
             const cached = statsCacheRef.current.get(cacheKey);
             if (cached && (Date.now() - cached.t) <= 10000) {
               if (cancelled) return;
-              if (cached.stats) setVaultStats(cached.stats);
+              if (cached.stats) {
+                // Blend with any higher prefetched totals (avoid stale RPC reads showing lower values)
+                if (prefTotals != null) {
+                  const cachedTotalNum = Number(cached.stats.totalEntries);
+                  if (!Number.isFinite(cachedTotalNum) || prefTotals > cachedTotalNum) {
+                    const upgraded = { ...cached.stats, totalEntries: String(prefTotals) };
+                    setVaultStats(upgraded);
+                  } else {
+                    setVaultStats(cached.stats);
+                  }
+                } else {
+                  setVaultStats(cached.stats);
+                }
+              }
               if (cached.data)  setVaultData(cached.data);
               // Kick off neighbor prefetch in background while showing cache
               try { prefetchNeighborsStats(); } catch {}
@@ -1934,7 +2039,14 @@
               ENTRY_FEE: entryFeeWei,
               PAYOUT_AMOUNT: payoutWei,
               vaultBalance: vaultBalanceWei,
-              totalEntriesMade: totalEntriesMade,
+              totalEntries: (() => {
+                const onChainTotal = Number(totalEntriesMade.toString());
+                if (Number.isFinite(onChainTotal)) {
+                  if (prefTotals != null && prefTotals > onChainTotal) return String(prefTotals);
+                  return String(onChainTotal);
+                }
+                return prefTotals != null ? String(prefTotals) : totalEntriesMade.toString();
+              })(),
               approvedLimit: allowanceWei,
               userBalance: userBalWei,
               decimals: decimals,
@@ -4776,6 +4888,8 @@
                             if (!nonZero) { setStatus('Enter a non-zero amount.'); setBusy(false); return; }
                           } catch {}
                           const entryWei = ethers.utils.parseUnits(amountStr, decimals);
+                          const entryTokensString = ethers.utils.formatUnits(entryWei, decimals);
+                          const entryFeeTokens = Number(entryTokensString);
                           setStatus('Deploying NewMatrix...');
                           const fac = new ethers.ContractFactory(abi, bytecode, signer);
                           const contract = await fac.deploy(tokenAddress, entryWei, vp);
@@ -4828,16 +4942,53 @@
                             // Fire a deployment event (listeners will refresh tokens)
                             try { window.dispatchEvent(new CustomEvent('newContractDeployed', { detail: { contractName: 'newMatrix', address, token: tokenAddress, abiKey, vpSize: vp, chainId: Number(net.chainId) } })); } catch {}
 
-                            // Publish to public matrices DB (Google Sheets) like Factory.html
+                            // Publish to public matrices DB via API so cron indexer can enrich it later
                             try {
-                              const __isProdHost = (function(h){ try{ return /(^|\.)pulsematrix\.app$/i.test(h||''); }catch{ return false; } })(location && location.hostname);
-                              const MATRICES_API_URL = (window.MATRICES_API_URL || (__isProdHost?null:localStorage.getItem('MATRICES_API_URL')) || 'https://script.google.com/macros/s/AKfycbyEyspSK4xDspCjOnbacvtqIVER9Di9m2zHw4go3y46rr0AZlTrc8Lg-HgVCApQbP0L_Q/exec');
+                              const resolveDefaultApi = () => {
+                                try {
+                                  const loc = window.location;
+                                  if (loc && /^https?:$/i.test(loc.protocol || '')) {
+                                    if ((loc.hostname || '').match(/(^|\.)pulsematrix\.app$/i)) {
+                                      return '/api/register-matrix.php';
+                                    }
+                                  }
+                                } catch {}
+                                return 'https://pulsematrix.app/api/register-matrix.php';
+                              };
+                              const defaultApi = resolveDefaultApi();
+                              let storedApi = null;
+                              try { storedApi = window.MATRICES_API_URL || localStorage.getItem('MATRICES_API_URL'); } catch {}
+                              const MATRICES_API_URL = storedApi || defaultApi;
                               let receipt = '';
                               try { const read = new ethers.Contract(address, abi, provider); if (read.getReceiptContract) receipt = await read.getReceiptContract(); } catch {}
-                              const payload = { name: 'newMatrix', vault: address, receipt, token: tokenAddress, abiKey, vpSize: vp, chainId: Number(net.chainId), color: '#00c3ff', decimals, approved: true, active: true };
-                              try { if(!__isProdHost) localStorage.setItem('MATRICES_API_URL', MATRICES_API_URL); } catch {}
-                              await fetch(MATRICES_API_URL, { method: 'POST', mode: 'no-cors', headers: { 'content-type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
-                              setStatus(prev => prev + ' • Published to DB');
+                              const payload = {
+                                name: 'newMatrix',
+                                vault: address,
+                                receipt,
+                                token: tokenAddress,
+                                abiKey,
+                                vpSize: vp,
+                                chainId: Number(net.chainId),
+                                color: '#00c3ff',
+                                decimals,
+                                entryFee: Number.isFinite(entryFeeTokens) ? Math.round(entryFeeTokens) : null,
+                                entryFeeWei: entryWei.toString(),
+                                approved: true,
+                                active: true
+                              };
+                              try { window.lastRegisterPayload = payload; } catch {}
+                              try { localStorage.setItem('MATRICES_API_URL', MATRICES_API_URL); } catch {}
+                              const resp = await fetch(MATRICES_API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                              if (!resp.ok) {
+                                const text = await resp.text();
+                                throw new Error(`Register API responded ${resp.status}: ${text}`);
+                              }
+                              let json;
+                              try { json = await resp.json(); } catch { json = null; }
+                              if (!json || json.ok !== true) {
+                                throw new Error(json && json.error ? json.error : 'Register API returned unexpected response');
+                              }
+                              setStatus(prev => prev + ' • Registered in DB');
                             } catch (postErr) {
                               // Non-blocking
                               try { console.warn('DB publish failed:', postErr); } catch {}
