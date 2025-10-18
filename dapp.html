@@ -57,6 +57,17 @@
         '../frontend/vendor/prefetched-matrices.json'
       ];
 
+      try {
+        const primaryHost = 'https://pulsematrix.app';
+        const remoteVariants = [
+          `${primaryHost}/vendor/prefetched-matrices.json`,
+          `${primaryHost}/frontend/vendor/prefetched-matrices.json`
+        ];
+        for (const url of remoteVariants) {
+          if (!PATHS.includes(url)) PATHS.push(url);
+        }
+      } catch {}
+
       function normaliseVault(value){
         return value ? String(value).trim().toLowerCase() : '';
       }
@@ -3341,69 +3352,199 @@
               const [nowTs,setNowTs]=React.useState(Date.now());
               React.useEffect(()=>{ if(!isPuMaToken) return; const id=setInterval(()=>setNowTs(Date.now()),1000); return ()=>clearInterval(id); },[isPuMaToken]);
               const COOLDOWN=3600_000; const msLeft=Math.max(0,(lastPuMaClaim+COOLDOWN)-nowTs); const canClaimPuMa = isPuMaToken && msLeft===0; const formatRemain=(ms)=>{const s=Math.floor(ms/1000);const m=Math.floor(s/60);const r=s%60;return `${m}m ${r}s`;};
-              React.useEffect(()=>{ if(!account) return; let ignore=false; async function load(){ try{ const provider=new ethers.providers.Web3Provider(window.ethereum); const vault=new ethers.Contract(cfg.vault,window.AllVaultABI[cfg.abiKey],provider); const tokenC=new ethers.Contract(cfg.token,['function allowance(address,address)view returns(uint256)','function balanceOf(address) view returns (uint256)'],provider); const [entryFee,nextTokenId,eolActive, userTokens, allowance,lastEntryTs,payoutAmount, vaultBal] = await Promise.all([
-                vault.ENTRY_FEE(),vault.nextTokenId(),vault.isEOLActive(),vault.getMyEntries(account),tokenC.allowance(account,cfg.vault),vault.lastEntryTimestamp(), vault.PAYOUT_AMOUNT ? vault.PAYOUT_AMOUNT(): Promise.resolve(ethers.BigNumber.from(0)), tokenC.balanceOf(cfg.vault)
-              ]);
-                const payout = payoutAmount && payoutAmount.gt(0)? payoutAmount: entryFee;
-                const maxId = nextTokenId.toNumber()-1;
-                // Determine cycle context for ACTIVE entries (matches History-card logic)
-                let eolCycleCount=0; let postEOLVPId=1; let lastEOLTriggerEntry=0;
-                try{ if(vault.EOLCycleCount) eolCycleCount=Number(await vault.EOLCycleCount()); }catch{}
-                try{ if(vault.postEOLVPId){ const v=Number(await vault.postEOLVPId()); if(v>0) postEOLVPId=v; } }catch{}
-                if(eolCycleCount>0 && vault.EOLTriggerAtEntryId){ try{ const trig=Number(await vault.EOLTriggerAtEntryId(eolCycleCount)); if(trig>0){ lastEOLTriggerEntry=trig; if(postEOLVPId===1) postEOLVPId=trig+1; } }catch{} }
-                const totalEntriesMade = Math.max(0, maxId);
-                const cycleStart = lastEOLTriggerEntry>0 ? lastEOLTriggerEntry+1 : 1;
-                // OPEN VP progress (index-based within current cycle)
-                const matrixSize = token.matrixSize ? parseInt(token.matrixSize,10) : (/3x3/i.test(token.name)?3:4);
-                const structureSize = getVPStructureSize(matrixSize);
-                const base = lastEOLTriggerEntry>0 ? lastEOLTriggerEntry : 0;
-                const vp1Complete = isVPCompleteByIndex(1, totalEntriesMade, matrixSize, lastEOLTriggerEntry);
-                // Find first open VP index (skip closed/paid)
-                const startIndex = vp1Complete ? 2 : 1;
-                let firstOpenIdx = null;
-                {
-                  let scan = startIndex; let guard = 0;
-                  while (guard++ < 1000) {
-                    const payPoint = getVPPaymentPointByIndex(scan, matrixSize, lastEOLTriggerEntry);
-                    if (totalEntriesMade < payPoint) { firstOpenIdx = scan; break; }
-                    scan++;
+              React.useEffect(() => {
+                let ignore = false;
+                const vaultKey = (cfg?.vault || '').toLowerCase();
+
+                function hydrateFromPrefetched(){
+                  try {
+                    if (!vaultKey) return;
+                    const store = window.__prefetchedMatrixStats && window.__prefetchedMatrixStats.byVault;
+                    if (!store || typeof store.get !== 'function') return;
+                    const pref = store.get(vaultKey);
+                    if (!pref) return;
+                    const decimals = Number(pref.decimals ?? cfg?.decimals ?? 18);
+                    const formatBn = (bn, fallback) => {
+                      if (!bn || !ethers.BigNumber.isBigNumber(bn)) return fallback;
+                      try { return ethers.utils.formatUnits(bn, decimals); } catch { return fallback; }
+                    };
+                    const toInt = (value) => {
+                      if (value == null) return null;
+                      if (ethers.BigNumber.isBigNumber(value)) {
+                        try { return Number(value.toString()); } catch { return null; }
+                      }
+                      const num = Number(value);
+                      return Number.isFinite(num) ? num : null;
+                    };
+                    setStats(prev => {
+                      const next = { ...prev };
+                      if (pref.entryFeeBN) {
+                        next.entryFee = formatBn(pref.entryFeeBN, prev.entryFee);
+                        next.rawEntryFee = pref.entryFeeBN;
+                      } else if (pref.formatted?.entryFee) {
+                        next.entryFee = pref.formatted.entryFee;
+                      }
+                      if (pref.payoutBN) {
+                        next.payout = formatBn(pref.payoutBN, prev.payout);
+                      } else if (pref.formatted?.payout) {
+                        next.payout = pref.formatted.payout;
+                      }
+                      if (pref.vaultBalanceBN) {
+                        next.vaultBalance = formatBn(pref.vaultBalanceBN, prev.vaultBalance);
+                      } else if (pref.formatted?.vaultBalance) {
+                        next.vaultBalance = pref.formatted.vaultBalance;
+                      }
+                      const unpaid = pref.vaultState?.unpaidOpenEntries;
+                      const unpaidNum = toInt(unpaid);
+                      if (unpaidNum != null) next.totalOpenUnpaid = String(unpaidNum);
+                      const lastTs = toInt(pref.vaultState?.lastEntryTimestamp);
+                      if (lastTs != null) next.lastEntryTs = lastTs;
+                      return next;
+                    });
+                  } catch {}
+                }
+
+                hydrateFromPrefetched();
+
+                async function load(){
+                  try {
+                    const abi = window.AllVaultABI && cfg?.abiKey && window.AllVaultABI[cfg.abiKey];
+                    if (!abi) return;
+                    const provider = getReadProvider();
+                    if (!provider) return;
+                    const vault = new ethers.Contract(cfg.vault, abi, provider);
+                    const tokenFns = [
+                      'function allowance(address,address)view returns(uint256)',
+                      'function balanceOf(address) view returns (uint256)',
+                      'function decimals() view returns (uint8)'
+                    ];
+                    const tokenRead = new ethers.Contract(cfg.token, tokenFns, provider);
+
+                    const [
+                      entryFee,
+                      nextTokenId,
+                      eolActive,
+                      lastEntryTsRaw,
+                      payoutAmountRaw,
+                      vaultBalRaw,
+                      userTokensRaw,
+                      allowanceRaw
+                    ] = await Promise.all([
+                      vault.ENTRY_FEE().catch(async () => (vault.entryFee ? vault.entryFee() : ethers.BigNumber.from(0))),
+                      vault.nextTokenId().catch(() => ethers.BigNumber.from(1)),
+                      vault.isEOLActive().catch(() => false),
+                      vault.lastEntryTimestamp().catch(() => null),
+                      vault.PAYOUT_AMOUNT ? vault.PAYOUT_AMOUNT().catch(() => ethers.BigNumber.from(0)) : Promise.resolve(ethers.BigNumber.from(0)),
+                      tokenRead.balanceOf(cfg.vault).catch(() => ethers.BigNumber.from(0)),
+                      account ? vault.getMyEntries(account).catch(() => []) : Promise.resolve([]),
+                      account ? tokenRead.allowance(account, cfg.vault).catch(() => ethers.BigNumber.from(0)) : Promise.resolve(null)
+                    ]);
+
+                    if (ignore) return;
+
+                    const payoutAmount = payoutAmountRaw && payoutAmountRaw.gt && payoutAmountRaw.gt(0) ? payoutAmountRaw : entryFee;
+                    const vaultBal = vaultBalRaw || ethers.BigNumber.from(0);
+                    const lastEntryTs = lastEntryTsRaw ? Number(lastEntryTsRaw.toString()) : null;
+
+                    let eolCycleCount = 0;
+                    let lastEOLTriggerEntry = 0;
+                    try { if (vault.EOLCycleCount) eolCycleCount = Number(await vault.EOLCycleCount()); } catch {}
+                    if (eolCycleCount > 0 && vault.EOLTriggerAtEntryId) {
+                      try {
+                        const trig = Number(await vault.EOLTriggerAtEntryId(eolCycleCount));
+                        if (trig > 0) {
+                          lastEOLTriggerEntry = trig;
+                        }
+                      } catch {}
+                    }
+
+                    let decimals = cfg.decimals || 18;
+                    try {
+                      const dec = await tokenRead.decimals();
+                      if (dec != null) decimals = Number(dec);
+                    } catch {}
+
+                    const maxId = nextTokenId ? Number(nextTokenId.toString()) - 1 : 0;
+                    const totalEntriesMade = Math.max(0, maxId);
+                    const base = lastEOLTriggerEntry > 0 ? lastEOLTriggerEntry : 0;
+
+                    const matrixSize = token.matrixSize ? parseInt(token.matrixSize, 10) : (/3x3/i.test(token.name) ? 3 : 4);
+                    const structureSize = getVPStructureSize(matrixSize);
+                    const vp1Complete = isVPCompleteByIndex(1, totalEntriesMade, matrixSize, lastEOLTriggerEntry);
+                    const startIndex = vp1Complete ? 2 : 1;
+
+                    let firstOpenIdx = null;
+                    {
+                      let scan = startIndex;
+                      let guard = 0;
+                      while (guard++ < 1000) {
+                        const payPoint = getVPPaymentPointByIndex(scan, matrixSize, lastEOLTriggerEntry);
+                        if (totalEntriesMade < payPoint) { firstOpenIdx = scan; break; }
+                        scan++;
+                      }
+                    }
+
+                    const baseline = (matrixSize === 4 ? 20 : 4);
+                    let openVPFill = 0;
+                    if (firstOpenIdx !== null) {
+                      if (!vp1Complete) {
+                        openVPFill = computeVPFilledByIndex(firstOpenIdx, totalEntriesMade, matrixSize, lastEOLTriggerEntry);
+                      } else {
+                        const prefillAmount = computePrefilledForLeaderIndex(firstOpenIdx, totalEntriesMade, lastEOLTriggerEntry, matrixSize);
+                        const adjustedPrefill = Math.max(prefillAmount, baseline);
+                        openVPFill = Math.min(adjustedPrefill, structureSize);
+                      }
+                    }
+                    const openVPDisplay = `${Math.min(openVPFill, structureSize)}/${structureSize}${openVPFill>=structureSize?' Filled':''}`;
+
+                    const spacing = getPaySpacing(matrixSize);
+                    const cycleTotal = Math.max(0, totalEntriesMade - base);
+                    let paidCount = 0;
+                    if (cycleTotal >= structureSize) {
+                      paidCount = 1 + Math.floor((cycleTotal - structureSize) / spacing);
+                    }
+                    const activeEntriesCount = Math.max(0, cycleTotal - paidCount);
+
+                    let canTriggerEOL = false;
+                    if (!eolActive) {
+                      try { canTriggerEOL = await vault.canTriggerEOL(); } catch {}
+                    }
+
+                    const userTokens = Array.isArray(userTokensRaw) ? userTokensRaw.map(x => Number(x.toString())) : [];
+                    const allowance = allowanceRaw && allowanceRaw._isBigNumber ? allowanceRaw : null;
+
+                    const format = (bn) => {
+                      if (!bn || !ethers.BigNumber.isBigNumber(bn)) return null;
+                      try { return ethers.utils.formatUnits(bn, decimals); } catch { return null; }
+                    };
+
+                    if (ignore) return;
+                    setStats(prev => ({
+                      ...prev,
+                      entryFee: format(entryFee) || prev.entryFee,
+                      payout: format(payoutAmount) || prev.payout,
+                      vaultBalance: format(vaultBal) || prev.vaultBalance,
+                      totalOpenUnpaid: String(activeEntriesCount),
+                      openVP: openVPDisplay,
+                      allowance: allowance != null ? allowance : prev.allowance,
+                      rawEntryFee: entryFee || prev.rawEntryFee,
+                      lastEntryTs: lastEntryTs != null ? Number(lastEntryTs) : prev.lastEntryTs,
+                      canJoin: !eolActive,
+                      eolActive,
+                      canTriggerEOL,
+                      userTokens
+                    }));
+                  } catch (err) {
+                    if (!ignore) {
+                      try { console.warn('ALL card live fetch failed', cfg?.vault, err); } catch {}
+                    }
                   }
                 }
-                const baseline = (matrixSize === 4 ? 20 : 4);
-                let openVPFill = 0;
-                let activeWork = 0; // entries beyond baseline currently filling the active VP
-                if (firstOpenIdx !== null) {
-                  // Compute fill: before VP#1 pays use raw fill (baseline = 0); afterwards rely on prefill output (already includes post-paypoint joins)
-                  if (!vp1Complete) {
-                    openVPFill = computeVPFilledByIndex(firstOpenIdx, totalEntriesMade, matrixSize, lastEOLTriggerEntry);
-                    activeWork = Math.max(0, openVPFill); // baseline is 0 before VP#1 completes
-                  } else {
-                    const prefillAmount = computePrefilledForLeaderIndex(firstOpenIdx, totalEntriesMade, lastEOLTriggerEntry, matrixSize);
-                    // Compute leftover joins since the previous paypoint for this VP (works for 3x3 and 4x4)
-                    const adjustedPrefill = Math.max(prefillAmount, baseline);
-                    openVPFill = Math.min(adjustedPrefill, structureSize);
-                    activeWork = Math.max(0, openVPFill - baseline);
-                  }
-                } else {
-                  openVPFill = 0; activeWork = 0;
-                }
-                const openVPDisplay = `${Math.min(openVPFill, structureSize)}/${structureSize}${openVPFill>=structureSize?' Filled':''}`;
-                // Active Entries = (entries in current cycle) − (number of paid paypoints in cycle)
-                // Example (3x3): s=13, spacing=9, total=25 => paid at 13 and 22 (2 paid) => 25 − 2 = 23
-                const spacing = getPaySpacing(matrixSize);
-                const s = structureSize;
-                const cycleTotal = Math.max(0, totalEntriesMade - base); // entries since cycle start
-                let paidCount = 0;
-                if (cycleTotal >= s) {
-                  paidCount = 1 + Math.floor((cycleTotal - s) / spacing);
-                }
-                const activeEntriesCount = Math.max(0, cycleTotal - paidCount);
-                let canTriggerEOL=false; if(!eolActive){ try{ canTriggerEOL = await vault.canTriggerEOL(); }catch{} }
-                if(!ignore) setStats({entryFee:ethers.utils.formatUnits(entryFee,cfg.decimals||18), payout:ethers.utils.formatUnits(payout,cfg.decimals||18), vaultBalance: ethers.utils.formatUnits(vaultBal,cfg.decimals||18), totalOpenUnpaid: String(activeEntriesCount), openVP:openVPDisplay, allowance, rawEntryFee:entryFee, lastEntryTs:lastEntryTs?Number(lastEntryTs.toString()):null, canJoin: !eolActive, eolActive, canTriggerEOL, userTokens: userTokens.map(x=>Number(x.toString()))});
-              }catch(e){ console.error('ALL card load',token.name,e); }
-              }
-              load(); const id=setInterval(load,12000); return ()=>{ignore=true; clearInterval(id);} ;
-            },[account,cfg,token.name,token.matrixSize]);
+
+                load();
+                const id = setInterval(load, 12000);
+                return () => { ignore = true; clearInterval(id); };
+              },[account,cfg,token.name,token.matrixSize]);
               async function handleTriggerEOL(){ if(!account) return; setLoading(true); try{ const provider=new ethers.providers.Web3Provider(window.ethereum); const signer=provider.getSigner(); const vault=new ethers.Contract(cfg.vault,window.AllVaultABI[cfg.abiKey],signer); const tx=await vault.triggerEOL(); await tx.wait(); setTxMsg('EOL triggered'); }catch(e){ console.error('triggerEOL',e); setTxMsg('EOL error'); } setLoading(false); }
               async function handleApprove(){
                 if(!account||!stats.rawEntryFee) return; setApproving(true);
