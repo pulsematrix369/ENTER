@@ -462,6 +462,9 @@
       line-height: 1.2;
       height: 40px; /* fixed to match search */
     }
+    .quick-nav-btn:disabled {
+      cursor: not-allowed;
+    }
     /* Ensure search control matches button exact height/box model */
     .quick-nav-search { box-sizing: border-box; height: 40px; }
     /* Quick-nav inline search (button-like input + icon) */
@@ -1756,22 +1759,37 @@
       }
 
       // --- Free-claim PuMa state & helpers  ---
-      const [lastPuMaClaim, setLastPuMaClaim] = React.useState(() => {
-        if (account) {
-          const t = localStorage.getItem(`lastPuMaClaim_${account.toLowerCase()}`);
-          return t ? parseInt(t, 10) : 0;
+      const persistPuMaClaim = React.useCallback((ts, addr) => {
+        if (!ts || Number.isNaN(ts)) return;
+        const normalized = addr ? String(addr).toLowerCase() : null;
+        try { localStorage.setItem('lastPuMaClaim_global', String(ts)); } catch {}
+        if (normalized) {
+          try { localStorage.setItem(`lastPuMaClaim_${normalized}`, String(ts)); } catch {}
+          try { localStorage.setItem('lastPuMaClaim_global_owner', normalized); } catch {}
         }
+      }, []);
+      const readStoredPuMaClaim = React.useCallback((addr) => {
+        try {
+          if (!addr) return 0;
+          const normalized = String(addr).toLowerCase();
+          const key = `lastPuMaClaim_${normalized}`;
+          const stored = localStorage.getItem(key);
+          const parsed = stored ? parseInt(stored, 10) : 0;
+          if (parsed && !Number.isNaN(parsed)) return parsed;
+          const fallback = localStorage.getItem('lastPuMaClaim_global');
+          const owner = localStorage.getItem('lastPuMaClaim_global_owner');
+          const parsedFallback = fallback ? parseInt(fallback, 10) : 0;
+          if (parsedFallback && !Number.isNaN(parsedFallback) && owner && owner === normalized) return parsedFallback;
+        } catch {}
         return 0;
-      });
-      // Update lastPuMaClaim when account changes
+      }, []);
+      const [lastPuMaClaim, setLastPuMaClaim] = React.useState(() => readStoredPuMaClaim(account));
       React.useEffect(() => {
-        if (account) {
-          const t = localStorage.getItem(`lastPuMaClaim_${account.toLowerCase()}`);
-          setLastPuMaClaim(t ? parseInt(t, 10) : 0);
-        } else {
-          setLastPuMaClaim(0);
-        }
-      }, [account]);
+        if (!account) { setLastPuMaClaim(0); return; }
+        const ts = readStoredPuMaClaim(account);
+        setLastPuMaClaim(ts);
+        if (account && ts > 0) persistPuMaClaim(ts, account);
+      }, [account, readStoredPuMaClaim, persistPuMaClaim]);
       // Helper: is claim available?
       const canClaimPuMa = () => {
         const tk = tokens[carouselIdx];
@@ -1779,10 +1797,21 @@
         const now = Date.now();
         return (now - lastPuMaClaim) > 3600_000; // 1 hour in ms
       };
+      const puMaToken = React.useMemo(() => {
+        return tokens.find(t => t && t.name && t.name.includes('PuMa')) || null;
+      }, [tokens]);
       // Free-claim handler
-      async function freeClaimPuMa() {
+      async function freeClaimPuMa(targetToken) {
         try {
-          const tk = tokens[carouselIdx];
+          const tkCandidate = (targetToken && !targetToken.preventDefault) ? targetToken : null;
+          let tk = tkCandidate;
+          if (!tk || !tk.config?.token) {
+            tk = tokens.find(t => t && t.name && t.name.includes('PuMa')) || tokens[carouselIdx];
+          }
+          if (!tk || !tk.name || !tk.name.includes('PuMa')) {
+            alert('PuMa token not available yet.');
+            return;
+          }
           const PuMaToken = tk?.config?.token;
           if (!window.ethereum) { alert('Please install MetaMask or another Web3 wallet.'); return; }
           if (!PuMaToken) { alert('PuMa token address not found in config'); return; }
@@ -1802,8 +1831,9 @@
             'function canClaim(address account) view returns (bool)'
           ];
           const contract = new ethers.Contract(PuMaToken, abi, signer);
+          let userAddress = null;
           try {
-            const userAddress = await signer.getAddress();
+            userAddress = await signer.getAddress();
             const ok = await contract.canClaim(userAddress);
             if (!ok) { alert('You cannot claim at this time. Please wait for cooldown period.'); return; }
           } catch (_) {
@@ -1814,7 +1844,7 @@
           alert('Free claim successful!');
           const now = Date.now();
           setLastPuMaClaim(now);
-          if (account) localStorage.setItem(`lastPuMaClaim_${account.toLowerCase()}`, now.toString());
+          persistPuMaClaim(now, userAddress || account);
         } catch (e) {
           if (e && (e.code === -32603 || e.code === -32000)) {
             if (e.data && e.data.message && e.data.message.includes('revert')) {
@@ -2422,6 +2452,11 @@
                 };
                 return (
                   <>
+                    <ClaimSidebarButton
+                      puMaToken={puMaToken}
+                      lastClaimTs={lastPuMaClaim}
+                      onClaim={freeClaimPuMa}
+                    />
                     <button className="quick-nav-btn" onClick={goFAQ}>FAQ</button>
                     <button className="quick-nav-btn" onClick={goCarouselHome}>Carousel</button>
                     <button className="quick-nav-btn" onClick={goALL}>ALL Tokens</button>
@@ -2509,7 +2544,7 @@
                         zIndex: 101,
                         boxShadow: '0 6px 18px rgba(0,255,0,0.2)'
                       }}
-                      onClick={freeClaimPuMa}
+                      onClick={() => freeClaimPuMa()}
                       onMouseEnter={(e) => { e.target.style.background = 'rgba(0,255,0,0.10)'; }}
                       onMouseLeave={(e) => { e.target.style.background = '#000'; }}
                     >
@@ -2969,6 +3004,11 @@
               };
               return (
                 <>
+                  <ClaimSidebarButton
+                    puMaToken={puMaToken}
+                    lastClaimTs={lastPuMaClaim}
+                    onClaim={freeClaimPuMa}
+                  />
                   <button className="quick-nav-btn" onClick={goFAQ}>FAQ</button>
                   <button className="quick-nav-btn" onClick={goCarouselHome}>Carousel</button>
                   <button className="quick-nav-btn" onClick={goALL}>ALL Tokens</button>
@@ -3603,7 +3643,7 @@
                   const c=new ethers.Contract(cfg.token,claimAbi,signer);
                   try{ const ok=await c.canClaim(account); if(!ok) return; }catch{}
                   const tx=await c.claim(); await tx.wait();
-                  const now=Date.now(); setLastPuMaClaim(now); localStorage.setItem(`lastPuMaClaim_${account.toLowerCase()}`,String(now));
+                  const now=Date.now(); setLastPuMaClaim(now); persistPuMaClaim(now, account);
                 }catch(e){ console.error('puma claim',e);} }
               const hasAllowance = stats.allowance && stats.rawEntryFee ? stats.allowance.gte(stats.rawEntryFee): false; const nowSec=Math.floor(Date.now()/1000); const elapsedSec= stats.lastEntryTs? Math.max(nowSec-stats.lastEntryTs,0):0; const daysSince=Math.min(Math.floor(elapsedSec/86400),36);
               async function addTokenToMetaMask(){
@@ -3861,7 +3901,7 @@
                       return store.get(vaultKey) || null;
                     } catch { return null; }
                   }, [cfg?.vault, refreshStats]);
-                  const [row, setRow] = React.useState({
+                    const [row, setRow] = React.useState({
                     entryFee: null,
                     payout: null,
                     decimals: cfg.decimals || 18,
@@ -3874,12 +3914,12 @@
                     ageDays: 0
                   });
 
-                  React.useEffect(() => {
+                  const seedFromPrefetch = React.useCallback(() => {
                     if (!prefetchedStats) return;
                     setRow(prev => {
                       const next = { ...prev };
-                      if (prefetchedStats.entryFeeBN) next.entryFee = prefetchedStats.entryFeeBN;
-                      if (prefetchedStats.payoutBN) next.payout = prefetchedStats.payoutBN;
+                      if (next.entryFee == null && prefetchedStats.entryFeeBN) next.entryFee = prefetchedStats.entryFeeBN;
+                      if (next.payout == null && prefetchedStats.payoutBN) next.payout = prefetchedStats.payoutBN;
                       if (prefetchedStats.vaultBalanceBN) next.vaultBalance = prefetchedStats.vaultBalanceBN;
                       const prefDecimals = prefetchedStats.decimals;
                       if (prefDecimals != null && !Number.isNaN(prefDecimals)) {
@@ -3912,6 +3952,8 @@
                       return next;
                     });
                   }, [prefetchedStats, cfg?.decimals]);
+
+                  React.useEffect(() => { seedFromPrefetch(); }, [seedFromPrefetch]);
 
                   React.useEffect(() => {
                     if (!prefetchedStats?.vaultState || !cfg?.vault) return;
@@ -3949,13 +3991,25 @@
                           'function allowance(address,address) view returns(uint256)'
                         ], provider);
 
-                        const [decimals, entryFeeBN, payoutBN, vBalBN, lastTsRaw] = await Promise.all([
+                        const [decimals, entryFeeBNRaw, payoutBNRaw, vBalBN, lastTsRaw] = await Promise.all([
                           erc20.decimals().catch(()=> cfg.decimals || 18),
-                          vault.ENTRY_FEE().catch(()=> null),
-                          vault.PAYOUT_AMOUNT().catch(()=> null),
+                          vault.ENTRY_FEE().catch(async () => {
+                            if (typeof vault.entryFee === 'function') {
+                              try { return await vault.entryFee(); } catch {}
+                            }
+                            return null;
+                          }),
+                          vault.PAYOUT_AMOUNT().catch(async () => {
+                            if (typeof vault.payoutAmount === 'function') {
+                              try { return await vault.payoutAmount(); } catch {}
+                            }
+                            return null;
+                          }),
                           erc20.balanceOf(cfg.vault).catch(()=> null),
                           vault.lastEntryTimestamp().catch(()=> null)
                         ]);
+                        const entryFeeBN = entryFeeBNRaw;
+                        const payoutBN = payoutBNRaw || entryFeeBNRaw;
 
                         // Basic cycle/openVP snapshot
                         let nextId = null, cycleCount = 0, lastTrig = 0;
@@ -4069,9 +4123,9 @@
                           } catch {}
                         }
 
-                        if (!ignore) setRow({
-                          entryFee: entryFeeBN,
-                          payout: payoutBN,
+                        if (!ignore) setRow(prev => ({
+                          entryFee: prev.entryFee ?? entryFeeBN,
+                          payout: prev.payout ?? payoutBN,
                           decimals,
                           allowance,
                           approved,
@@ -4080,7 +4134,7 @@
                           openVPs: openDisplay,
                           healthPct,
                           ageDays
-                        });
+                        }));
                       } catch {}
                     })();
                     return () => { ignore = true; };
@@ -5376,7 +5430,7 @@
                         zIndex: 201,
                         boxShadow: '0 6px 18px rgba(0,255,0,0.2)'
                       }}
-                      onClick={freeClaimPuMa}
+                      onClick={() => freeClaimPuMa()}
                       onMouseEnter={(e) => { e.target.style.background = 'rgba(0,255,0,0.10)'; }}
                       onMouseLeave={(e) => { e.target.style.background = '#000'; }}
                     >
@@ -7144,6 +7198,66 @@
             </div>
           </div>
         </>
+      );
+    }
+
+    function ClaimSidebarButton({ puMaToken, lastClaimTs, onClaim }) {
+      const [tick, setTick] = React.useState(() => Date.now());
+      React.useEffect(() => {
+        if (!lastClaimTs || !puMaToken) return;
+        const cooldownEnd = lastClaimTs + 3600_000;
+        if (Date.now() >= cooldownEnd) {
+          setTick(Date.now());
+          return;
+        }
+        const id = setInterval(() => {
+          setTick((prev) => {
+            const next = Date.now();
+            if (next >= cooldownEnd) {
+              clearInterval(id);
+            }
+            return next;
+          });
+        }, 1000);
+        return () => clearInterval(id);
+      }, [lastClaimTs, puMaToken]);
+
+      const msLeft = puMaToken && lastClaimTs ? Math.max(0, (lastClaimTs + 3600_000) - tick) : 0;
+      const hasToken = Boolean(puMaToken && puMaToken.config && puMaToken.config.token);
+      const disabled = !hasToken || msLeft > 0;
+      const formatMs = (ms) => {
+        const totalSeconds = Math.max(0, Math.ceil(ms / 1000));
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        return `${minutes}m ${seconds.toString().padStart(2, '0')}s`;
+      };
+      const label = !hasToken ? 'PuMa Missing' : (msLeft > 0 ? formatMs(msLeft) : 'Claim PuMa');
+
+      return (
+        <button
+          className="quick-nav-btn"
+          onClick={() => {
+            if (disabled) return;
+            if (!puMaToken) {
+              alert('PuMa token config not found.');
+              return;
+            }
+            try { onClaim && onClaim(puMaToken); } catch {}
+          }}
+          disabled={disabled}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '6px',
+            opacity: disabled ? 0.75 : 1,
+            boxShadow: disabled ? '0 3px 12px rgba(0,255,0,0.12)' : '0 6px 18px rgba(0,255,0,0.18)'
+          }}
+          title={!hasToken ? 'PuMa token unavailable' : (msLeft > 0 ? 'PuMa claim on cooldown' : 'Claim your free PuMa token')}
+        >
+          <img src="favicon-32x32.png" alt="PuMa" style={{ width: '18px', height: '18px' }} />
+          <span>{label}</span>
+        </button>
       );
     }
 
