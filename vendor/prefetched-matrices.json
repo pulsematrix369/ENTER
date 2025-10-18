@@ -1,88 +1,12 @@
 {
-  "generatedAt": "2025-10-13T14:10:55.791Z",
+  "generatedAt": "2025-10-18T14:21:13.925Z",
   "source": "pulsemat_ALL_matrix.ALL",
-  "matrixCount": 19,
+  "matrixCount": 20,
   "items": [
-    {
-      "id": 1,
-      "chainId": 369,
-      "tokenName": "WPLS",
-      "tokenAddress": "0xA1077a294dDE1B09bB078844df40758a5D0f9a27",
-      "resolvedTokenAddress": "0xA1077a294dDE1B09bB078844df40758a5D0f9a27",
-      "vault": "0x51f7afFc0E0e3922E8662898aF1F99bAdb2D0912",
-      "entryFee": {
-        "wei": "369000000000000000000000",
-        "formatted": "369000.000000"
-      },
-      "payout": {
-        "wei": "2049795000000000000000000",
-        "formatted": "2049795.000000"
-      },
-      "vaultBalance": {
-        "wei": "2952000000000000000000000",
-        "formatted": "2952000.000000"
-      },
-      "tokenMeta": {
-        "decimals": 18,
-        "symbol": "WPLS",
-        "name": "Wrapped Pulse"
-      },
-      "vaultState": {
-        "nextTokenId": "9",
-        "lastEntryTimestamp": "1760198735",
-        "eolCycleCount": "0",
-        "eolTimestamp": "0",
-        "eolLastTriggerEntry": null,
-        "eolActive": false,
-        "unpaidOpenEntries": "8"
-      },
-      "db": {
-        "entryFee": 369000,
-        "receipt": "0x7F36f300dE705fB9fdE43af7e96e7F90Dd340d6f"
-      }
-    },
-    {
-      "id": 2,
-      "chainId": 369,
-      "tokenName": "eHEX",
-      "tokenAddress": "0x57fde0a71132198BBeC939B98976993d8D89D225",
-      "resolvedTokenAddress": "0x57fde0a71132198BBeC939B98976993d8D89D225",
-      "vault": "0x11fFDACa642F46564871f4E8a23373e2dE55ce10",
-      "entryFee": {
-        "wei": "555500000000",
-        "formatted": "5555.000000"
-      },
-      "payout": {
-        "wei": "30858025000000",
-        "formatted": "308580.250000"
-      },
-      "vaultBalance": {
-        "wei": "3888500000000",
-        "formatted": "38885.000000"
-      },
-      "tokenMeta": {
-        "decimals": 8,
-        "symbol": "HEX",
-        "name": "HEX from Ethereum"
-      },
-      "vaultState": {
-        "nextTokenId": "8",
-        "lastEntryTimestamp": "1759360095",
-        "eolCycleCount": "0",
-        "eolTimestamp": "0",
-        "eolLastTriggerEntry": null,
-        "eolActive": false,
-        "unpaidOpenEntries": "7"
-      },
-      "db": {
-        "entryFee": 5555,
-        "receipt": "0xad738769e1d536175ffb71e3bfbf973382f8bb04"
-      }
-    },
     {
       "id": 3,
       "chainId": 369,
-      "tokenName": "pHEX",
+      "tokenName": "HEX",
       "tokenAddress": "0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39",
       "resolvedTokenAddress": "0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39",
       "vault": "0x002Bd3cc2ecF997b58908Bd32D671de466838355",
@@ -110,248 +34,49 @@
         "eolTimestamp": "0",
         "eolLastTriggerEntry": null,
         "eolActive": false,
-        "unpaidOpenEntries": "6"
+        "unpaidOpenEntries": "6",
+        "lastPaidEntryId": "0",
+        "vpSize": "3",
+        "fullVpSize": "13"
+      },
+      "vaultParams": {
+        "EOL_TRIGGER_REWARD": "369",
+        "EOL_TRIGGER_DELAY": "3188160",
+        "MIN_ENTRIES_FOR_EOL": "4",
+        "PAYOUT_MULTIPLIER": "5555",
+        "VP_SIZE": "3",
+        "FULL_VP_SIZE": "13",
+        "VAULT_RESERVE": "6445",
+        "vpSize": 3,
+        "fullVpSize": 13
+      },
+      "derived": {
+        "vp": {
+          "vpSize": 3,
+          "fullVpSize": 13,
+          "totalEntries": 6,
+          "unpaidOpenEntries": 6,
+          "paidVPsCount": 0,
+          "fullVPsCount": 0
+        }
       },
       "db": {
         "entryFee": 3690,
-        "receipt": "0x06a52f5d88bc64640b1520cbced9fff3367440df"
+        "receipt": "0x06a52F5d88bC64640B1520cbCeD9FFF3367440Df",
+        "color": "#00c3ff",
+        "name": "pHEX 3x3",
+        "tokenSymbol": "HEX",
+        "abiKey": "PuMa3x3",
+        "vpSize": 3
       }
     },
     {
-      "id": 4,
+      "id": 2,
       "chainId": 369,
-      "tokenName": "PLSX",
-      "tokenAddress": "0x95B303987A60C71504D99Aa1b13B4DA07b0790ab",
-      "resolvedTokenAddress": "0x95B303987A60C71504D99Aa1b13B4DA07b0790ab",
-      "vault": "0x1c87e56Eb4AD23F3B9E3A43Edc648A43Addf92f9",
-      "entryFee": {
-        "wei": "555555000000000000000000",
-        "formatted": "555555.000000"
-      },
-      "payout": {
-        "wei": "3086108025000000000000000",
-        "formatted": "3086108.025000"
-      },
-      "vaultBalance": {
-        "wei": "2222220000000000000000000",
-        "formatted": "2222220.000000"
-      },
-      "tokenMeta": {
-        "decimals": 18,
-        "symbol": "PLSX",
-        "name": "PulseX"
-      },
-      "vaultState": {
-        "nextTokenId": "5",
-        "lastEntryTimestamp": "1760198815",
-        "eolCycleCount": "0",
-        "eolTimestamp": "0",
-        "eolLastTriggerEntry": null,
-        "eolActive": false,
-        "unpaidOpenEntries": "4"
-      },
-      "db": {
-        "entryFee": 555555,
-        "receipt": "0x5f4fddad75eb4552a2b69cdac1e035d6d54c5db6"
-      }
-    },
-    {
-      "id": 5,
-      "chainId": 369,
-      "tokenName": "pDAI",
-      "tokenAddress": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
-      "resolvedTokenAddress": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
-      "vault": "0x83035ED4D32Ec888B73775d8b77C354842f7FFA0",
-      "entryFee": {
-        "wei": "100000000000000000000000",
-        "formatted": "100000.000000"
-      },
-      "payout": {
-        "wei": "555500000000000000000000",
-        "formatted": "555500.000000"
-      },
-      "vaultBalance": {
-        "wei": "700000000000000000000000",
-        "formatted": "700000.000000"
-      },
-      "tokenMeta": {
-        "decimals": 18,
-        "symbol": "DAI",
-        "name": "Dai Stablecoin"
-      },
-      "vaultState": {
-        "nextTokenId": "8",
-        "lastEntryTimestamp": "1759769235",
-        "eolCycleCount": "0",
-        "eolTimestamp": "0",
-        "eolLastTriggerEntry": null,
-        "eolActive": false,
-        "unpaidOpenEntries": "7"
-      },
-      "db": {
-        "entryFee": 100000,
-        "receipt": "0x935c06dd784a6f290843cf24cb4959d08023678b"
-      }
-    },
-    {
-      "id": 6,
-      "chainId": 369,
-      "tokenName": "INC",
-      "tokenAddress": "0x2fa878Ab3F87CC1C9737Fc071108F904c0B0C95d",
-      "resolvedTokenAddress": "0x2fa878Ab3F87CC1C9737Fc071108F904c0B0C95d",
-      "vault": "0x4f5a0f35024A94C29aAFD7a7b5a3308FfbB0Aeb8",
-      "entryFee": {
-        "wei": "369000000000000000000",
-        "formatted": "369.000000"
-      },
-      "payout": {
-        "wei": "2049795000000000000000",
-        "formatted": "2049.795000"
-      },
-      "vaultBalance": {
-        "wei": "1107000000000000000000",
-        "formatted": "1107.000000"
-      },
-      "tokenMeta": {
-        "decimals": 18,
-        "symbol": "INC",
-        "name": "Incentive"
-      },
-      "vaultState": {
-        "nextTokenId": "4",
-        "lastEntryTimestamp": "1759586305",
-        "eolCycleCount": "0",
-        "eolTimestamp": "0",
-        "eolLastTriggerEntry": null,
-        "eolActive": false,
-        "unpaidOpenEntries": "3"
-      },
-      "db": {
-        "entryFee": 369,
-        "receipt": "0x4a5550b884d1a987d4c1f148248454082616a09e"
-      }
-    },
-    {
-      "id": 7,
-      "chainId": 369,
-      "tokenName": "pDAI",
-      "tokenAddress": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
-      "resolvedTokenAddress": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
-      "vault": "0x8fA2aDcfc5984f4016E21a80F0e6080aD4c21DC5",
-      "entryFee": {
-        "wei": "36900000000000000000000",
-        "formatted": "36900.000000"
-      },
-      "payout": {
-        "wei": "2049795000000000000000000",
-        "formatted": "2049795.000000"
-      },
-      "vaultBalance": {
-        "wei": "110700000000000000000000",
-        "formatted": "110700.000000"
-      },
-      "tokenMeta": {
-        "decimals": 18,
-        "symbol": "DAI",
-        "name": "Dai Stablecoin"
-      },
-      "vaultState": {
-        "nextTokenId": "4",
-        "lastEntryTimestamp": "1759586125",
-        "eolCycleCount": "0",
-        "eolTimestamp": "0",
-        "eolLastTriggerEntry": null,
-        "eolActive": false,
-        "unpaidOpenEntries": "3"
-      },
-      "db": {
-        "entryFee": 36900,
-        "receipt": "0x4b577da3f48e28abaafacce457e45bcfaf0854e0"
-      }
-    },
-    {
-      "id": 8,
-      "chainId": 369,
-      "tokenName": "wBTC",
-      "tokenAddress": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
-      "resolvedTokenAddress": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
-      "vault": "0xbfE1E4074ff86Cac630c0174AA49b41E47Cbf2B3",
-      "entryFee": {
-        "wei": "100000000",
-        "formatted": "1.000000"
-      },
-      "payout": {
-        "wei": "555500000",
-        "formatted": "5.555000"
-      },
-      "vaultBalance": {
-        "wei": "200000000",
-        "formatted": "2.000000"
-      },
-      "tokenMeta": {
-        "decimals": 8,
-        "symbol": "WBTC",
-        "name": "Wrapped BTC"
-      },
-      "vaultState": {
-        "nextTokenId": "3",
-        "lastEntryTimestamp": "1759334315",
-        "eolCycleCount": "0",
-        "eolTimestamp": "0",
-        "eolLastTriggerEntry": null,
-        "eolActive": false,
-        "unpaidOpenEntries": "2"
-      },
-      "db": {
-        "entryFee": 1,
-        "receipt": "0x6d839fab957c176930cbf3d4b18c89072e53cf89"
-      }
-    },
-    {
-      "id": 9,
-      "chainId": 369,
-      "tokenName": "wBTC",
-      "tokenAddress": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
-      "resolvedTokenAddress": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
-      "vault": "0xAa2B6CFac8EDA3C470771614527b60b75e128f48",
-      "entryFee": {
-        "wei": "100000000",
-        "formatted": "1.000000"
-      },
-      "payout": {
-        "wei": "5555000000",
-        "formatted": "55.550000"
-      },
-      "vaultBalance": {
-        "wei": "200000000",
-        "formatted": "2.000000"
-      },
-      "tokenMeta": {
-        "decimals": 8,
-        "symbol": "WBTC",
-        "name": "Wrapped BTC"
-      },
-      "vaultState": {
-        "nextTokenId": "3",
-        "lastEntryTimestamp": "1759334375",
-        "eolCycleCount": "0",
-        "eolTimestamp": "0",
-        "eolLastTriggerEntry": null,
-        "eolActive": false,
-        "unpaidOpenEntries": "2"
-      },
-      "db": {
-        "entryFee": 1,
-        "receipt": "0x8bb4d9b0cd0f32bc1c517d200dd1c6e14604b492"
-      }
-    },
-    {
-      "id": 10,
-      "chainId": 369,
-      "tokenName": "pHEX",
-      "tokenAddress": "0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39",
-      "resolvedTokenAddress": "0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39",
-      "vault": "0xe1eD93261bD6B3B78e58c3c7d5a9ba80e674e6C3",
+      "tokenName": "HEX from Ethereum",
+      "tokenAddress": "0x57fde0a71132198BBeC939B98976993d8D89D225",
+      "resolvedTokenAddress": "0x57fde0a71132198BBeC939B98976993d8D89D225",
+      "vault": "0x11fFDACa642F46564871f4E8a23373e2dE55ce10",
       "entryFee": {
         "wei": "555500000000",
         "formatted": "5555.000000"
@@ -361,46 +86,8 @@
         "formatted": "308580.250000"
       },
       "vaultBalance": {
-        "wei": "1666500000000",
-        "formatted": "16665.000000"
-      },
-      "tokenMeta": {
-        "decimals": 8,
-        "symbol": "HEX",
-        "name": "HEX"
-      },
-      "vaultState": {
-        "nextTokenId": "4",
-        "lastEntryTimestamp": "1760109415",
-        "eolCycleCount": "0",
-        "eolTimestamp": "0",
-        "eolLastTriggerEntry": null,
-        "eolActive": false,
-        "unpaidOpenEntries": "3"
-      },
-      "db": {
-        "entryFee": 3690,
-        "receipt": "0x3766b93f3000c5a287884eb7d93f03bc57be0262"
-      }
-    },
-    {
-      "id": 11,
-      "chainId": 369,
-      "tokenName": "eHEX",
-      "tokenAddress": "0x57fde0a71132198BBeC939B98976993d8D89D225",
-      "resolvedTokenAddress": "0x57fde0a71132198BBeC939B98976993d8D89D225",
-      "vault": "0x5BF2BF687324561F56ce35E3BcB12A8384BFE595",
-      "entryFee": {
-        "wei": "369000000000",
-        "formatted": "3690.000000"
-      },
-      "payout": {
-        "wei": "2049795000000",
-        "formatted": "20497.950000"
-      },
-      "vaultBalance": {
-        "wei": "1107000000000",
-        "formatted": "11070.000000"
+        "wei": "3888500000000",
+        "formatted": "38885.000000"
       },
       "tokenMeta": {
         "decimals": 8,
@@ -408,23 +95,52 @@
         "name": "HEX from Ethereum"
       },
       "vaultState": {
-        "nextTokenId": "4",
-        "lastEntryTimestamp": "1760118845",
+        "nextTokenId": "8",
+        "lastEntryTimestamp": "1759360095",
         "eolCycleCount": "0",
         "eolTimestamp": "0",
         "eolLastTriggerEntry": null,
         "eolActive": false,
-        "unpaidOpenEntries": "3"
+        "unpaidOpenEntries": "7",
+        "lastPaidEntryId": "0",
+        "vpSize": "4",
+        "fullVpSize": "85"
+      },
+      "vaultParams": {
+        "EOL_TRIGGER_REWARD": "5555",
+        "EOL_TRIGGER_DELAY": "3188160",
+        "MIN_ENTRIES_FOR_EOL": "10",
+        "PAYOUT_MULTIPLIER": "55550",
+        "VP_SIZE": "4",
+        "FULL_VP_SIZE": "85",
+        "VAULT_RESERVE": "27450",
+        "vpSize": 4,
+        "fullVpSize": 85
+      },
+      "derived": {
+        "vp": {
+          "vpSize": 4,
+          "fullVpSize": 85,
+          "totalEntries": 7,
+          "unpaidOpenEntries": 7,
+          "paidVPsCount": 0,
+          "fullVPsCount": 0
+        }
       },
       "db": {
         "entryFee": 5555,
-        "receipt": "0x955ab26b8cda6ce6297d104129b7ebdd30b0699f"
+        "receipt": "0xaD738769e1D536175ffB71e3bfBf973382f8Bb04",
+        "color": "#00c3ff",
+        "name": "eHEX 4x4",
+        "tokenSymbol": "HEX",
+        "abiKey": "PuMa4x4",
+        "vpSize": 4
       }
     },
     {
       "id": 12,
       "chainId": 369,
-      "tokenName": "DWB",
+      "tokenName": "dickwifbutt",
       "tokenAddress": "0xAEbcD0F8f69ECF9587e292bdfc4d731c1abedB68",
       "resolvedTokenAddress": "0xAEbcD0F8f69ECF9587e292bdfc4d731c1abedB68",
       "vault": "0x127E48E698E0800C885ADF5cfa82E7BcD65d96DF",
@@ -452,17 +168,46 @@
         "eolTimestamp": "0",
         "eolLastTriggerEntry": null,
         "eolActive": false,
-        "unpaidOpenEntries": "1"
+        "unpaidOpenEntries": "1",
+        "lastPaidEntryId": "0",
+        "vpSize": "3",
+        "fullVpSize": "13"
+      },
+      "vaultParams": {
+        "EOL_TRIGGER_REWARD": "369",
+        "EOL_TRIGGER_DELAY": "3188160",
+        "MIN_ENTRIES_FOR_EOL": "4",
+        "PAYOUT_MULTIPLIER": "5555",
+        "VP_SIZE": "3",
+        "FULL_VP_SIZE": "13",
+        "VAULT_RESERVE": "6445",
+        "vpSize": 3,
+        "fullVpSize": 13
+      },
+      "derived": {
+        "vp": {
+          "vpSize": 3,
+          "fullVpSize": 13,
+          "totalEntries": 1,
+          "unpaidOpenEntries": 1,
+          "paidVPsCount": 0,
+          "fullVPsCount": 0
+        }
       },
       "db": {
         "entryFee": 696969,
-        "receipt": "0x15f47d1dab134a45c0a995a6e772574307086c7e"
+        "receipt": "0x15F47d1dAB134a45C0A995a6E772574307086c7e",
+        "color": "#00c3ff",
+        "name": "DWB 3x3",
+        "tokenSymbol": "DWB",
+        "abiKey": "PuMa3x3",
+        "vpSize": 3
       }
     },
     {
       "id": 13,
       "chainId": 369,
-      "tokenName": "sciViVe",
+      "tokenName": "sciVive",
       "tokenAddress": "0x72a96Ea9DA0C909500eEF1Ef81B433C3A26EB649",
       "resolvedTokenAddress": "0x72a96Ea9DA0C909500eEF1Ef81B433C3A26EB649",
       "vault": "0x150B43a9b8f770A7B7D8BB4ee86b116e7Fc99BB3",
@@ -490,55 +235,113 @@
         "eolTimestamp": "0",
         "eolLastTriggerEntry": null,
         "eolActive": false,
-        "unpaidOpenEntries": "1"
+        "unpaidOpenEntries": "1",
+        "lastPaidEntryId": "0",
+        "vpSize": "3",
+        "fullVpSize": "13"
+      },
+      "vaultParams": {
+        "EOL_TRIGGER_REWARD": "369",
+        "EOL_TRIGGER_DELAY": "3188160",
+        "MIN_ENTRIES_FOR_EOL": "4",
+        "PAYOUT_MULTIPLIER": "5555",
+        "VP_SIZE": "3",
+        "FULL_VP_SIZE": "13",
+        "VAULT_RESERVE": "6445",
+        "vpSize": 3,
+        "fullVpSize": 13
+      },
+      "derived": {
+        "vp": {
+          "vpSize": 3,
+          "fullVpSize": 13,
+          "totalEntries": 1,
+          "unpaidOpenEntries": 1,
+          "paidVPsCount": 0,
+          "fullVPsCount": 0
+        }
       },
       "db": {
         "entryFee": 55555,
-        "receipt": "0x2b5cc2d090aa4a0ad19186e0c85fb51ed120cef8"
+        "receipt": "0x2b5Cc2d090aA4A0Ad19186e0c85fb51Ed120cEf8",
+        "color": "#00c3ff",
+        "name": "sciViVe 3x3",
+        "tokenSymbol": "sciViVe",
+        "abiKey": "PuMa3x3",
+        "vpSize": 3
       }
     },
     {
-      "id": 14,
+      "id": 4,
       "chainId": 369,
-      "tokenName": "FART",
-      "tokenAddress": "0x6f40B31737c2B9010Ca86C8a04683Dd64527E205",
-      "resolvedTokenAddress": "0x6f40B31737c2B9010Ca86C8a04683Dd64527E205",
-      "vault": "0x5509F29e168AaC3cD4c85c043f784B81a0cAe6d0",
+      "tokenName": "PulseX",
+      "tokenAddress": "0x95B303987A60C71504D99Aa1b13B4DA07b0790ab",
+      "resolvedTokenAddress": "0x95B303987A60C71504D99Aa1b13B4DA07b0790ab",
+      "vault": "0x1c87e56Eb4AD23F3B9E3A43Edc648A43Addf92f9",
       "entryFee": {
-        "wei": "5555000000000000000000",
-        "formatted": "5555.000000"
+        "wei": "555555000000000000000000",
+        "formatted": "555555.000000"
       },
       "payout": {
-        "wei": "30858025000000000000000",
-        "formatted": "30858.025000"
+        "wei": "3086108025000000000000000",
+        "formatted": "3086108.025000"
       },
       "vaultBalance": {
-        "wei": "5555000000000000000000",
-        "formatted": "5555.000000"
+        "wei": "2222220000000000000000000",
+        "formatted": "2222220.000000"
       },
       "tokenMeta": {
         "decimals": 18,
-        "symbol": "Fartcoin",
-        "name": "Richard Fartcoin"
+        "symbol": "PLSX",
+        "name": "PulseX"
       },
       "vaultState": {
-        "nextTokenId": "2",
-        "lastEntryTimestamp": "1759537235",
+        "nextTokenId": "5",
+        "lastEntryTimestamp": "1760198815",
         "eolCycleCount": "0",
         "eolTimestamp": "0",
         "eolLastTriggerEntry": null,
         "eolActive": false,
-        "unpaidOpenEntries": "1"
+        "unpaidOpenEntries": "4",
+        "lastPaidEntryId": "0",
+        "vpSize": "3",
+        "fullVpSize": "13"
+      },
+      "vaultParams": {
+        "EOL_TRIGGER_REWARD": "369",
+        "EOL_TRIGGER_DELAY": "3188160",
+        "MIN_ENTRIES_FOR_EOL": "4",
+        "PAYOUT_MULTIPLIER": "5555",
+        "VP_SIZE": "3",
+        "FULL_VP_SIZE": "13",
+        "VAULT_RESERVE": "6445",
+        "vpSize": 3,
+        "fullVpSize": 13
+      },
+      "derived": {
+        "vp": {
+          "vpSize": 3,
+          "fullVpSize": 13,
+          "totalEntries": 4,
+          "unpaidOpenEntries": 4,
+          "paidVPsCount": 0,
+          "fullVPsCount": 0
+        }
       },
       "db": {
-        "entryFee": 5555,
-        "receipt": "0x724ab86d4f687560beca7c54f836917ccc49018f"
+        "entryFee": 555555,
+        "receipt": "0x5f4FDDAD75eb4552a2B69cdac1E035d6D54c5DB6",
+        "color": "#00c3ff",
+        "name": "PLSX 3x3",
+        "tokenSymbol": "PLSX",
+        "abiKey": "PuMa3x3",
+        "vpSize": 3
       }
     },
     {
       "id": 15,
       "chainId": 369,
-      "tokenName": "DORRA",
+      "tokenName": "DorraWifHat",
       "tokenAddress": "0x393937C233D42bB965373759EcFb6265B998F17e",
       "resolvedTokenAddress": "0x393937C233D42bB965373759EcFb6265B998F17e",
       "vault": "0x34F5df6a6040D3c7bbe36E9afEf33fC1C624016B",
@@ -566,17 +369,381 @@
         "eolTimestamp": "0",
         "eolLastTriggerEntry": null,
         "eolActive": false,
-        "unpaidOpenEntries": "1"
+        "unpaidOpenEntries": "1",
+        "lastPaidEntryId": "0",
+        "vpSize": "3",
+        "fullVpSize": "13"
+      },
+      "vaultParams": {
+        "EOL_TRIGGER_REWARD": "369",
+        "EOL_TRIGGER_DELAY": "3188160",
+        "MIN_ENTRIES_FOR_EOL": "4",
+        "PAYOUT_MULTIPLIER": "5555",
+        "VP_SIZE": "3",
+        "FULL_VP_SIZE": "13",
+        "VAULT_RESERVE": "6445",
+        "vpSize": 3,
+        "fullVpSize": 13
+      },
+      "derived": {
+        "vp": {
+          "vpSize": 3,
+          "fullVpSize": 13,
+          "totalEntries": 1,
+          "unpaidOpenEntries": 1,
+          "paidVPsCount": 0,
+          "fullVPsCount": 0
+        }
       },
       "db": {
         "entryFee": 5555,
-        "receipt": "0x6c851c9086a76b93eb1321128244c3bfae1c2da9"
+        "receipt": "0x6C851c9086A76b93Eb1321128244C3bFaE1C2DA9",
+        "color": "#00c3ff",
+        "name": "DORRA 3x3",
+        "tokenSymbol": "DORRA",
+        "abiKey": "PuMa3x3",
+        "vpSize": 3
+      }
+    },
+    {
+      "id": 18,
+      "chainId": 369,
+      "tokenName": "PUMA",
+      "tokenAddress": "0xbc2C3D958b858E044A1d99875b276c56C5d07E36",
+      "resolvedTokenAddress": "0xbc2C3D958b858E044A1d99875b276c56C5d07E36",
+      "vault": "0x4E893c22fd469b3Fc343cfC1d8A9F7ddd64B16d0",
+      "entryFee": {
+        "wei": "555500000000000000000",
+        "formatted": "555.500000"
+      },
+      "payout": {
+        "wei": "30858025000000000000000",
+        "formatted": "30858.025000"
+      },
+      "vaultBalance": {
+        "wei": "17679454100000000000000",
+        "formatted": "17679.454100"
+      },
+      "tokenMeta": {
+        "decimals": 18,
+        "symbol": "PUMA",
+        "name": "PUMA"
+      },
+      "vaultState": {
+        "nextTokenId": "150",
+        "lastEntryTimestamp": "1760737535",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "147",
+        "lastPaidEntryId": "2",
+        "vpSize": "4",
+        "fullVpSize": "85"
+      },
+      "vaultParams": {
+        "EOL_TRIGGER_REWARD": "5555",
+        "EOL_TRIGGER_DELAY": "3188160",
+        "MIN_ENTRIES_FOR_EOL": "10",
+        "PAYOUT_MULTIPLIER": "55550",
+        "VP_SIZE": "4",
+        "FULL_VP_SIZE": "85",
+        "VAULT_RESERVE": "27450",
+        "vpSize": 4,
+        "fullVpSize": 85
+      },
+      "derived": {
+        "vp": {
+          "vpSize": 4,
+          "fullVpSize": 85,
+          "totalEntries": 149,
+          "unpaidOpenEntries": 147,
+          "paidVPsCount": 2,
+          "fullVPsCount": 2
+        }
+      },
+      "db": {
+        "entryFee": 556,
+        "receipt": "0x8E4d176bb0E7B32103fA60e880614441aDe701F9",
+        "color": "#00c3ff",
+        "name": "PuMa 4x4",
+        "tokenSymbol": "PUMA",
+        "abiKey": "PuMa4x4",
+        "vpSize": 4
+      }
+    },
+    {
+      "id": 6,
+      "chainId": 369,
+      "tokenName": "Incentive",
+      "tokenAddress": "0x2fa878Ab3F87CC1C9737Fc071108F904c0B0C95d",
+      "resolvedTokenAddress": "0x2fa878Ab3F87CC1C9737Fc071108F904c0B0C95d",
+      "vault": "0x4f5a0f35024A94C29aAFD7a7b5a3308FfbB0Aeb8",
+      "entryFee": {
+        "wei": "369000000000000000000",
+        "formatted": "369.000000"
+      },
+      "payout": {
+        "wei": "2049795000000000000000",
+        "formatted": "2049.795000"
+      },
+      "vaultBalance": {
+        "wei": "1107000000000000000000",
+        "formatted": "1107.000000"
+      },
+      "tokenMeta": {
+        "decimals": 18,
+        "symbol": "INC",
+        "name": "Incentive"
+      },
+      "vaultState": {
+        "nextTokenId": "4",
+        "lastEntryTimestamp": "1759586305",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "3",
+        "lastPaidEntryId": "0",
+        "vpSize": "3",
+        "fullVpSize": "13"
+      },
+      "vaultParams": {
+        "EOL_TRIGGER_REWARD": "369",
+        "EOL_TRIGGER_DELAY": "3188160",
+        "MIN_ENTRIES_FOR_EOL": "4",
+        "PAYOUT_MULTIPLIER": "5555",
+        "VP_SIZE": "3",
+        "FULL_VP_SIZE": "13",
+        "VAULT_RESERVE": "6445",
+        "vpSize": 3,
+        "fullVpSize": 13
+      },
+      "derived": {
+        "vp": {
+          "vpSize": 3,
+          "fullVpSize": 13,
+          "totalEntries": 3,
+          "unpaidOpenEntries": 3,
+          "paidVPsCount": 0,
+          "fullVPsCount": 0
+        }
+      },
+      "db": {
+        "entryFee": 369,
+        "receipt": "0x4a5550B884d1A987d4C1f148248454082616A09e",
+        "color": "#00c3ff",
+        "name": "INC 3x3",
+        "tokenSymbol": "INC",
+        "abiKey": "PuMa3x3",
+        "vpSize": 3
+      }
+    },
+    {
+      "id": 1,
+      "chainId": 369,
+      "tokenName": "Wrapped Pulse",
+      "tokenAddress": "0xA1077a294dDE1B09bB078844df40758a5D0f9a27",
+      "resolvedTokenAddress": "0xA1077a294dDE1B09bB078844df40758a5D0f9a27",
+      "vault": "0x51f7afFc0E0e3922E8662898aF1F99bAdb2D0912",
+      "entryFee": {
+        "wei": "369000000000000000000000",
+        "formatted": "369000.000000"
+      },
+      "payout": {
+        "wei": "2049795000000000000000000",
+        "formatted": "2049795.000000"
+      },
+      "vaultBalance": {
+        "wei": "2952000000000000000000000",
+        "formatted": "2952000.000000"
+      },
+      "tokenMeta": {
+        "decimals": 18,
+        "symbol": "WPLS",
+        "name": "Wrapped Pulse"
+      },
+      "vaultState": {
+        "nextTokenId": "9",
+        "lastEntryTimestamp": "1760198735",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "8",
+        "lastPaidEntryId": "0",
+        "vpSize": "3",
+        "fullVpSize": "13"
+      },
+      "vaultParams": {
+        "EOL_TRIGGER_REWARD": "369",
+        "EOL_TRIGGER_DELAY": "3188160",
+        "MIN_ENTRIES_FOR_EOL": "4",
+        "PAYOUT_MULTIPLIER": "5555",
+        "VP_SIZE": "3",
+        "FULL_VP_SIZE": "13",
+        "VAULT_RESERVE": "6445",
+        "vpSize": 3,
+        "fullVpSize": 13
+      },
+      "derived": {
+        "vp": {
+          "vpSize": 3,
+          "fullVpSize": 13,
+          "totalEntries": 8,
+          "unpaidOpenEntries": 8,
+          "paidVPsCount": 0,
+          "fullVPsCount": 0
+        }
+      },
+      "db": {
+        "entryFee": 369000,
+        "receipt": "0x7F36f300dE705fB9fdE43af7e96e7F90Dd340d6f",
+        "color": "#00c3ff",
+        "name": "WPLS 3x3",
+        "tokenSymbol": "WPLS",
+        "abiKey": "PuMa3x3",
+        "vpSize": 3
+      }
+    },
+    {
+      "id": 14,
+      "chainId": 369,
+      "tokenName": "Richard Fartcoin",
+      "tokenAddress": "0x6f40B31737c2B9010Ca86C8a04683Dd64527E205",
+      "resolvedTokenAddress": "0x6f40B31737c2B9010Ca86C8a04683Dd64527E205",
+      "vault": "0x5509F29e168AaC3cD4c85c043f784B81a0cAe6d0",
+      "entryFee": {
+        "wei": "5555000000000000000000",
+        "formatted": "5555.000000"
+      },
+      "payout": {
+        "wei": "30858025000000000000000",
+        "formatted": "30858.025000"
+      },
+      "vaultBalance": {
+        "wei": "5555000000000000000000",
+        "formatted": "5555.000000"
+      },
+      "tokenMeta": {
+        "decimals": 18,
+        "symbol": "Fartcoin",
+        "name": "Richard Fartcoin"
+      },
+      "vaultState": {
+        "nextTokenId": "2",
+        "lastEntryTimestamp": "1759537235",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "1",
+        "lastPaidEntryId": "0",
+        "vpSize": "3",
+        "fullVpSize": "13"
+      },
+      "vaultParams": {
+        "EOL_TRIGGER_REWARD": "369",
+        "EOL_TRIGGER_DELAY": "3188160",
+        "MIN_ENTRIES_FOR_EOL": "4",
+        "PAYOUT_MULTIPLIER": "5555",
+        "VP_SIZE": "3",
+        "FULL_VP_SIZE": "13",
+        "VAULT_RESERVE": "6445",
+        "vpSize": 3,
+        "fullVpSize": 13
+      },
+      "derived": {
+        "vp": {
+          "vpSize": 3,
+          "fullVpSize": 13,
+          "totalEntries": 1,
+          "unpaidOpenEntries": 1,
+          "paidVPsCount": 0,
+          "fullVPsCount": 0
+        }
+      },
+      "db": {
+        "entryFee": 5555,
+        "receipt": "0x724AB86D4f687560BEca7c54F836917CCc49018f",
+        "color": "#00c3ff",
+        "name": "FART 3x3",
+        "tokenSymbol": "Fartcoin",
+        "abiKey": "PuMa3x3",
+        "vpSize": 3
+      }
+    },
+    {
+      "id": 11,
+      "chainId": 369,
+      "tokenName": "HEX from Ethereum",
+      "tokenAddress": "0x57fde0a71132198BBeC939B98976993d8D89D225",
+      "resolvedTokenAddress": "0x57fde0a71132198BBeC939B98976993d8D89D225",
+      "vault": "0x5BF2BF687324561F56ce35E3BcB12A8384BFE595",
+      "entryFee": {
+        "wei": "369000000000",
+        "formatted": "3690.000000"
+      },
+      "payout": {
+        "wei": "2049795000000",
+        "formatted": "20497.950000"
+      },
+      "vaultBalance": {
+        "wei": "1107000000000",
+        "formatted": "11070.000000"
+      },
+      "tokenMeta": {
+        "decimals": 8,
+        "symbol": "HEX",
+        "name": "HEX from Ethereum"
+      },
+      "vaultState": {
+        "nextTokenId": "4",
+        "lastEntryTimestamp": "1760118845",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "3",
+        "lastPaidEntryId": "0",
+        "vpSize": "3",
+        "fullVpSize": "13"
+      },
+      "vaultParams": {
+        "EOL_TRIGGER_REWARD": "369",
+        "EOL_TRIGGER_DELAY": "3188160",
+        "MIN_ENTRIES_FOR_EOL": "4",
+        "PAYOUT_MULTIPLIER": "5555",
+        "VP_SIZE": "3",
+        "FULL_VP_SIZE": "13",
+        "VAULT_RESERVE": "6445",
+        "vpSize": 3,
+        "fullVpSize": 13
+      },
+      "derived": {
+        "vp": {
+          "vpSize": 3,
+          "fullVpSize": 13,
+          "totalEntries": 3,
+          "unpaidOpenEntries": 3,
+          "paidVPsCount": 0,
+          "fullVPsCount": 0
+        }
+      },
+      "db": {
+        "entryFee": 5555,
+        "receipt": "0x955ab26b8CDA6ce6297d104129B7eBdd30B0699F",
+        "color": "#00c3ff",
+        "name": "eHEX 3x3",
+        "tokenSymbol": "HEX",
+        "abiKey": "PuMa3x3",
+        "vpSize": 3
       }
     },
     {
       "id": 15,
       "chainId": 369,
-      "tokenName": "9inch",
+      "tokenName": "9INCH",
       "tokenAddress": "0x3ca80d83277e721171284667829c686527B8b3c5",
       "resolvedTokenAddress": "0x3ca80d83277e721171284667829c686527B8b3c5",
       "vault": "0x7e410F051218c1f13B4d34a6263e21CE56Ca8D45",
@@ -604,17 +771,180 @@
         "eolTimestamp": "0",
         "eolLastTriggerEntry": null,
         "eolActive": false,
-        "unpaidOpenEntries": "1"
+        "unpaidOpenEntries": "1",
+        "lastPaidEntryId": "0",
+        "vpSize": "3",
+        "fullVpSize": "13"
+      },
+      "vaultParams": {
+        "EOL_TRIGGER_REWARD": "369",
+        "EOL_TRIGGER_DELAY": "3188160",
+        "MIN_ENTRIES_FOR_EOL": "4",
+        "PAYOUT_MULTIPLIER": "5555",
+        "VP_SIZE": "3",
+        "FULL_VP_SIZE": "13",
+        "VAULT_RESERVE": "6445",
+        "vpSize": 3,
+        "fullVpSize": 13
+      },
+      "derived": {
+        "vp": {
+          "vpSize": 3,
+          "fullVpSize": 13,
+          "totalEntries": 1,
+          "unpaidOpenEntries": 1,
+          "paidVPsCount": 0,
+          "fullVPsCount": 0
+        }
       },
       "db": {
         "entryFee": 5555555,
-        "receipt": "0x951024d086af2b68111e72440ca02470ed45ad34"
+        "receipt": "0x951024D086AF2B68111E72440Ca02470eD45Ad34",
+        "color": "#00c3ff",
+        "name": "9inch 3x3",
+        "tokenSymbol": "9INCH",
+        "abiKey": "PuMa3x3",
+        "vpSize": 3
+      }
+    },
+    {
+      "id": 5,
+      "chainId": 369,
+      "tokenName": "Dai Stablecoin",
+      "tokenAddress": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+      "resolvedTokenAddress": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+      "vault": "0x83035ED4D32Ec888B73775d8b77C354842f7FFA0",
+      "entryFee": {
+        "wei": "100000000000000000000000",
+        "formatted": "100000.000000"
+      },
+      "payout": {
+        "wei": "555500000000000000000000",
+        "formatted": "555500.000000"
+      },
+      "vaultBalance": {
+        "wei": "700000000000000000000000",
+        "formatted": "700000.000000"
+      },
+      "tokenMeta": {
+        "decimals": 18,
+        "symbol": "DAI",
+        "name": "Dai Stablecoin"
+      },
+      "vaultState": {
+        "nextTokenId": "8",
+        "lastEntryTimestamp": "1759769235",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "7",
+        "lastPaidEntryId": "0",
+        "vpSize": "3",
+        "fullVpSize": "13"
+      },
+      "vaultParams": {
+        "EOL_TRIGGER_REWARD": "369",
+        "EOL_TRIGGER_DELAY": "3188160",
+        "MIN_ENTRIES_FOR_EOL": "4",
+        "PAYOUT_MULTIPLIER": "5555",
+        "VP_SIZE": "3",
+        "FULL_VP_SIZE": "13",
+        "VAULT_RESERVE": "6445",
+        "vpSize": 3,
+        "fullVpSize": 13
+      },
+      "derived": {
+        "vp": {
+          "vpSize": 3,
+          "fullVpSize": 13,
+          "totalEntries": 7,
+          "unpaidOpenEntries": 7,
+          "paidVPsCount": 0,
+          "fullVPsCount": 0
+        }
+      },
+      "db": {
+        "entryFee": 100000,
+        "receipt": "0x935C06dd784a6F290843cF24cB4959d08023678B",
+        "color": "#00c3ff",
+        "name": "pDAI 3x3",
+        "tokenSymbol": "DAI",
+        "abiKey": "PuMa3x3",
+        "vpSize": 3
+      }
+    },
+    {
+      "id": 7,
+      "chainId": 369,
+      "tokenName": "Dai Stablecoin",
+      "tokenAddress": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+      "resolvedTokenAddress": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+      "vault": "0x8fA2aDcfc5984f4016E21a80F0e6080aD4c21DC5",
+      "entryFee": {
+        "wei": "36900000000000000000000",
+        "formatted": "36900.000000"
+      },
+      "payout": {
+        "wei": "2049795000000000000000000",
+        "formatted": "2049795.000000"
+      },
+      "vaultBalance": {
+        "wei": "110700000000000000000000",
+        "formatted": "110700.000000"
+      },
+      "tokenMeta": {
+        "decimals": 18,
+        "symbol": "DAI",
+        "name": "Dai Stablecoin"
+      },
+      "vaultState": {
+        "nextTokenId": "4",
+        "lastEntryTimestamp": "1759586125",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "3",
+        "lastPaidEntryId": "0",
+        "vpSize": "4",
+        "fullVpSize": "85"
+      },
+      "vaultParams": {
+        "EOL_TRIGGER_REWARD": "5555",
+        "EOL_TRIGGER_DELAY": "3188160",
+        "MIN_ENTRIES_FOR_EOL": "10",
+        "PAYOUT_MULTIPLIER": "55550",
+        "VP_SIZE": "4",
+        "FULL_VP_SIZE": "85",
+        "VAULT_RESERVE": "27450",
+        "vpSize": 4,
+        "fullVpSize": 85
+      },
+      "derived": {
+        "vp": {
+          "vpSize": 4,
+          "fullVpSize": 85,
+          "totalEntries": 3,
+          "unpaidOpenEntries": 3,
+          "paidVPsCount": 0,
+          "fullVPsCount": 0
+        }
+      },
+      "db": {
+        "entryFee": 36900,
+        "receipt": "0x4b577dA3F48E28AbAafAcCe457E45BcFaF0854E0",
+        "color": "#00c3ff",
+        "name": "pDAI 4x4",
+        "tokenSymbol": "DAI",
+        "abiKey": "PuMa4x4",
+        "vpSize": 4
       }
     },
     {
       "id": 16,
       "chainId": 369,
-      "tokenName": "pCOCK",
+      "tokenName": "PulseChain Peacock",
       "tokenAddress": "0xc10A4Ed9b4042222d69ff0B374eddd47ed90fC1F",
       "resolvedTokenAddress": "0xc10A4Ed9b4042222d69ff0B374eddd47ed90fC1F",
       "vault": "0x8Fe646b9dCA131D1b4c9aAa1CED37dC43Ec4d806",
@@ -642,17 +972,247 @@
         "eolTimestamp": "0",
         "eolLastTriggerEntry": null,
         "eolActive": false,
-        "unpaidOpenEntries": "27"
+        "unpaidOpenEntries": "27",
+        "lastPaidEntryId": "2",
+        "vpSize": "3",
+        "fullVpSize": "13"
+      },
+      "vaultParams": {
+        "EOL_TRIGGER_REWARD": "369",
+        "EOL_TRIGGER_DELAY": "3188160",
+        "MIN_ENTRIES_FOR_EOL": "4",
+        "PAYOUT_MULTIPLIER": "5555",
+        "VP_SIZE": "3",
+        "FULL_VP_SIZE": "13",
+        "VAULT_RESERVE": "6445",
+        "vpSize": 3,
+        "fullVpSize": 13
+      },
+      "derived": {
+        "vp": {
+          "vpSize": 3,
+          "fullVpSize": 13,
+          "totalEntries": 29,
+          "unpaidOpenEntries": 27,
+          "paidVPsCount": 2,
+          "fullVPsCount": 2
+        }
       },
       "db": {
         "entryFee": 5555,
-        "receipt": "0x6655d72a67e7a2d143246f8a50adaa1e57173ac8"
+        "receipt": "0x6655D72A67e7a2d143246f8a50AdAA1E57173Ac8",
+        "color": "#00c3ff",
+        "name": "pCOCK 3x3",
+        "tokenSymbol": "PCOCK",
+        "abiKey": "PuMa3x3",
+        "vpSize": 3
       }
     },
     {
-      "id": "manual-puma-3x3",
+      "id": 9,
       "chainId": 369,
-      "tokenName": "PuMa 3x3",
+      "tokenName": "Wrapped BTC",
+      "tokenAddress": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+      "resolvedTokenAddress": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+      "vault": "0xAa2B6CFac8EDA3C470771614527b60b75e128f48",
+      "entryFee": {
+        "wei": "100000000",
+        "formatted": "1.000000"
+      },
+      "payout": {
+        "wei": "5555000000",
+        "formatted": "55.550000"
+      },
+      "vaultBalance": {
+        "wei": "200000000",
+        "formatted": "2.000000"
+      },
+      "tokenMeta": {
+        "decimals": 8,
+        "symbol": "WBTC",
+        "name": "Wrapped BTC"
+      },
+      "vaultState": {
+        "nextTokenId": "3",
+        "lastEntryTimestamp": "1759334375",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "2",
+        "lastPaidEntryId": "0",
+        "vpSize": "4",
+        "fullVpSize": "85"
+      },
+      "vaultParams": {
+        "EOL_TRIGGER_REWARD": "5555",
+        "EOL_TRIGGER_DELAY": "3188160",
+        "MIN_ENTRIES_FOR_EOL": "10",
+        "PAYOUT_MULTIPLIER": "55550",
+        "VP_SIZE": "4",
+        "FULL_VP_SIZE": "85",
+        "VAULT_RESERVE": "27450",
+        "vpSize": 4,
+        "fullVpSize": 85
+      },
+      "derived": {
+        "vp": {
+          "vpSize": 4,
+          "fullVpSize": 85,
+          "totalEntries": 2,
+          "unpaidOpenEntries": 2,
+          "paidVPsCount": 0,
+          "fullVPsCount": 0
+        }
+      },
+      "db": {
+        "entryFee": 1,
+        "receipt": "0x8Bb4d9b0CD0F32BC1c517d200DD1C6e14604B492",
+        "color": "#00c3ff",
+        "name": "wBTC 4x4",
+        "tokenSymbol": "WBTC",
+        "abiKey": "PuMa4x4",
+        "vpSize": 4
+      }
+    },
+    {
+      "id": 8,
+      "chainId": 369,
+      "tokenName": "Wrapped BTC",
+      "tokenAddress": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+      "resolvedTokenAddress": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+      "vault": "0xbfE1E4074ff86Cac630c0174AA49b41E47Cbf2B3",
+      "entryFee": {
+        "wei": "100000000",
+        "formatted": "1.000000"
+      },
+      "payout": {
+        "wei": "555500000",
+        "formatted": "5.555000"
+      },
+      "vaultBalance": {
+        "wei": "200000000",
+        "formatted": "2.000000"
+      },
+      "tokenMeta": {
+        "decimals": 8,
+        "symbol": "WBTC",
+        "name": "Wrapped BTC"
+      },
+      "vaultState": {
+        "nextTokenId": "3",
+        "lastEntryTimestamp": "1759334315",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "2",
+        "lastPaidEntryId": "0",
+        "vpSize": "3",
+        "fullVpSize": "13"
+      },
+      "vaultParams": {
+        "EOL_TRIGGER_REWARD": "369",
+        "EOL_TRIGGER_DELAY": "3188160",
+        "MIN_ENTRIES_FOR_EOL": "4",
+        "PAYOUT_MULTIPLIER": "5555",
+        "VP_SIZE": "3",
+        "FULL_VP_SIZE": "13",
+        "VAULT_RESERVE": "6445",
+        "vpSize": 3,
+        "fullVpSize": 13
+      },
+      "derived": {
+        "vp": {
+          "vpSize": 3,
+          "fullVpSize": 13,
+          "totalEntries": 2,
+          "unpaidOpenEntries": 2,
+          "paidVPsCount": 0,
+          "fullVPsCount": 0
+        }
+      },
+      "db": {
+        "entryFee": 1,
+        "receipt": "0x6d839Fab957C176930Cbf3d4b18c89072e53Cf89",
+        "color": "#00c3ff",
+        "name": "wBTC 3x3",
+        "tokenSymbol": "WBTC",
+        "abiKey": "PuMa3x3",
+        "vpSize": 3
+      }
+    },
+    {
+      "id": 10,
+      "chainId": 369,
+      "tokenName": "HEX",
+      "tokenAddress": "0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39",
+      "resolvedTokenAddress": "0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39",
+      "vault": "0xe1eD93261bD6B3B78e58c3c7d5a9ba80e674e6C3",
+      "entryFee": {
+        "wei": "555500000000",
+        "formatted": "5555.000000"
+      },
+      "payout": {
+        "wei": "30858025000000",
+        "formatted": "308580.250000"
+      },
+      "vaultBalance": {
+        "wei": "1666500000000",
+        "formatted": "16665.000000"
+      },
+      "tokenMeta": {
+        "decimals": 8,
+        "symbol": "HEX",
+        "name": "HEX"
+      },
+      "vaultState": {
+        "nextTokenId": "4",
+        "lastEntryTimestamp": "1760109415",
+        "eolCycleCount": "0",
+        "eolTimestamp": "0",
+        "eolLastTriggerEntry": null,
+        "eolActive": false,
+        "unpaidOpenEntries": "3",
+        "lastPaidEntryId": "0",
+        "vpSize": "4",
+        "fullVpSize": "85"
+      },
+      "vaultParams": {
+        "EOL_TRIGGER_REWARD": "5555",
+        "EOL_TRIGGER_DELAY": "3188160",
+        "MIN_ENTRIES_FOR_EOL": "10",
+        "PAYOUT_MULTIPLIER": "55550",
+        "VP_SIZE": "4",
+        "FULL_VP_SIZE": "85",
+        "VAULT_RESERVE": "27450",
+        "vpSize": 4,
+        "fullVpSize": 85
+      },
+      "derived": {
+        "vp": {
+          "vpSize": 4,
+          "fullVpSize": 85,
+          "totalEntries": 3,
+          "unpaidOpenEntries": 3,
+          "paidVPsCount": 0,
+          "fullVPsCount": 0
+        }
+      },
+      "db": {
+        "entryFee": 3690,
+        "receipt": "0x3766B93F3000c5A287884EB7D93f03BC57BE0262",
+        "color": "#00c3ff",
+        "name": "pHEX 4x4",
+        "tokenSymbol": "HEX",
+        "abiKey": "PuMa4x4",
+        "vpSize": 4
+      }
+    },
+    {
+      "id": 17,
+      "chainId": 369,
+      "tokenName": "PUMA",
       "tokenAddress": "0xbc2C3D958b858E044A1d99875b276c56C5d07E36",
       "resolvedTokenAddress": "0xbc2C3D958b858E044A1d99875b276c56C5d07E36",
       "vault": "0xF2fF86e9478200DF100D0A1152a8732D972831c9",
@@ -665,8 +1225,8 @@
         "formatted": "2049.795000"
       },
       "vaultBalance": {
-        "wei": "21243366900000000000000",
-        "formatted": "21243.366900"
+        "wei": "22802133600000000000000",
+        "formatted": "22802.133600"
       },
       "tokenMeta": {
         "decimals": 18,
@@ -674,37 +1234,66 @@
         "name": "PUMA"
       },
       "vaultState": {
-        "nextTokenId": "197",
-        "lastEntryTimestamp": "1760326385",
+        "nextTokenId": "221",
+        "lastEntryTimestamp": "1760718435",
         "eolCycleCount": "0",
         "eolTimestamp": "0",
         "eolLastTriggerEntry": null,
         "eolActive": false,
-        "unpaidOpenEntries": "175"
+        "unpaidOpenEntries": "196",
+        "lastPaidEntryId": "24",
+        "vpSize": "3",
+        "fullVpSize": "13"
+      },
+      "vaultParams": {
+        "EOL_TRIGGER_REWARD": "3690",
+        "EOL_TRIGGER_DELAY": "3188160",
+        "MIN_ENTRIES_FOR_EOL": "4",
+        "PAYOUT_MULTIPLIER": "5555",
+        "VP_SIZE": "3",
+        "FULL_VP_SIZE": "13",
+        "VAULT_RESERVE": "6445",
+        "vpSize": 3,
+        "fullVpSize": 13
+      },
+      "derived": {
+        "vp": {
+          "vpSize": 3,
+          "fullVpSize": 13,
+          "totalEntries": 220,
+          "unpaidOpenEntries": 196,
+          "paidVPsCount": 24,
+          "fullVPsCount": 24
+        }
       },
       "db": {
-        "entryFee": null,
-        "receipt": "0x0426e270d1DE6c4f7f52b2753C2bBbC6773004cf"
+        "entryFee": 369,
+        "receipt": "0x0426e270d1DE6c4f7f52b2753C2bBbC6773004cf",
+        "color": "#00c3ff",
+        "name": "PuMa 3x3",
+        "tokenSymbol": "PUMA",
+        "abiKey": "PuMa3x3",
+        "vpSize": 3
       }
     },
     {
-      "id": "manual-puma-4x4",
-      "chainId": 369,
-      "tokenName": "PuMa 4x4",
-      "tokenAddress": "0xbc2C3D958b858E044A1d99875b276c56C5d07E36",
-      "resolvedTokenAddress": "0xbc2C3D958b858E044A1d99875b276c56C5d07E36",
-      "vault": "0x4E893c22fd469b3Fc343cfC1d8A9F7ddd64B16d0",
+      "id": 19,
+      "chainId": 943,
+      "tokenName": "PUMA",
+      "tokenAddress": "0x625C5eAa59527Fee32c77efdce75aaeAFC649Dd0",
+      "resolvedTokenAddress": "0x625C5eAa59527Fee32c77efdce75aaeAFC649Dd0",
+      "vault": "0x342B6221E2C65f1D75c0e39CEc9e545dDA0d5E05",
       "entryFee": {
-        "wei": "555500000000000000000",
-        "formatted": "555.500000"
+        "wei": "123000000000000000000",
+        "formatted": "123.000000"
       },
       "payout": {
-        "wei": "30858025000000000000000",
-        "formatted": "30858.025000"
+        "wei": "683265000000000000000",
+        "formatted": "683.265000"
       },
       "vaultBalance": {
-        "wei": "35225977050000000000000",
-        "formatted": "35225.977050"
+        "wei": "246000000000000000000",
+        "formatted": "246.000000"
       },
       "tokenMeta": {
         "decimals": 18,
@@ -712,17 +1301,46 @@
         "name": "PUMA"
       },
       "vaultState": {
-        "nextTokenId": "123",
-        "lastEntryTimestamp": "1760326565",
+        "nextTokenId": "3",
+        "lastEntryTimestamp": "1760391159",
         "eolCycleCount": "0",
         "eolTimestamp": "0",
         "eolLastTriggerEntry": null,
         "eolActive": false,
-        "unpaidOpenEntries": "121"
+        "unpaidOpenEntries": "2",
+        "lastPaidEntryId": "0",
+        "vpSize": "3",
+        "fullVpSize": "13"
+      },
+      "vaultParams": {
+        "EOL_TRIGGER_REWARD": "369",
+        "EOL_TRIGGER_DELAY": "3188160",
+        "MIN_ENTRIES_FOR_EOL": "4",
+        "PAYOUT_MULTIPLIER": "5555",
+        "VP_SIZE": "3",
+        "FULL_VP_SIZE": "13",
+        "VAULT_RESERVE": "6445",
+        "vpSize": 3,
+        "fullVpSize": 13
+      },
+      "derived": {
+        "vp": {
+          "vpSize": 3,
+          "fullVpSize": 13,
+          "totalEntries": 2,
+          "unpaidOpenEntries": 2,
+          "paidVPsCount": 0,
+          "fullVPsCount": 0
+        }
       },
       "db": {
-        "entryFee": null,
-        "receipt": "0x8E4d176bb0E7B32103fA60e880614441aDe701F9"
+        "entryFee": 123,
+        "receipt": "0xBd5Dcd87B038f5e05B64fe362ff0e2188265C835",
+        "color": "#00c3ff",
+        "name": "Puma 3x3",
+        "tokenSymbol": "PUMA",
+        "abiKey": "PUMA3X3",
+        "vpSize": 3
       }
     }
   ]
