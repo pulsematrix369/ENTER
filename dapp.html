@@ -2605,7 +2605,7 @@
 
   const faqSections = React.useMemo(() => ([
         // Disclaimer (open by default via state) - red outlined box
-        { id: 'disclaimer', title: '⚠️ RESEARCH DISCLAIMER', body: `<div class="disclaimer-box"><p>This project is offered purely for RESEARCH purposes only! This is an immutable, trustless, Fully Decentralized, Finished product, autonomous smart contract system with NO ADMIN KEYS and NO OFF switch. By participating, you acknowledge you enter the Matrix at your own risk. This is not financial advice and carries inherent smart-contract and blockchain risks.</p></div>` },
+        { id: 'disclaimer', title: '⚠️ RESEARCH DISCLAIMER', body: `<div class="disclaimer-box"><p>This project is offered purely for RESEARCH purposes only! This is an immutable, trustless, Fully Decentralized, Finished product, autonomous smart contract system with NO ADMIN KEYS and NO OFF switch, YET it is OPEN SOURCED. By participating, you acknowledge you enter the Matrix at your own risk. This is not financial advice and carries inherent smart-contract and blockchain risks.</p></div>` },
         // What is PuMa
         { id: 'what', title: '🎯 What is Pulse Matrix - PuMa?', body: `
           <p>PuMa (Pulse Matrix) is an autonomous VP RESEARCH system with a FIXED 3x3 OR 4x4 matrix option. Participants can enter with FREE PuMa tokens and earn Puma through mathematical progression logic. The system auto-configures based on matrix size choice.</p>
@@ -2926,7 +2926,7 @@
         // Security, Risk & AI Audit (combined)
         { id: 'security', title: '🛡️ Security, Risk Management & AI Audit', body: `
           <div class="warning-box"><h5>🔬 Research Reminder</h5><p>Experimental autonomous system. Treat as research.</p></div>
-          <div class="highlight-box"><h5>✅ Features</h5><ul><li>No Admin Keys</li><li>Immutable Logic</li><li>Open Source</li><li>Predictable thresholds</li></ul></div>
+          <div class="highlight-box"><h5>✅ Features</h5><ul><li>No Admin Keys</li><li>Immutable Logic</li><li>Open Source: <a href="https://github.com/pulsematrix369/PulseMATRIX.git" target="_blank" rel="noopener noreferrer">https://github.com/pulsematrix369/PulseMATRIX.git</a></li><li>Predictable thresholds</li></ul></div>
           <div class="danger-box"><h5>⚠️ Risks</h5><ul><li>Smart contract bugs</li><li>Network issues</li><li>Market price volatility</li><li>Participation slowdown</li></ul></div>
           <h5>✅ Security Audit Passed by AI</h5>
           <div class="highlight-box"><h5>🏭 Deployment Ready</h5><ul><li>Abstract & Robust Vault design</li><li>Universal token compatibility</li><li>Dynamic config (User token implementation)</li><li>Standard ABI for all</li></ul></div>
@@ -3362,6 +3362,7 @@
                 return <div className="token-card" style={{'--token-color': token.color || '#4ecdc4'}}>
                   <div className="token-header">
                     <div className="token-name">
+  <img src={`Pics/${(token.name||'').replace(/\s*(?:3x3|4x4|3×3|4×4)\b/gi,'').trim()} (Icon 100).png`} alt={`${(token.name||'').replace(/\s*(?:3x3|4x4|3x3|4x4|3×3|4×4)\b/gi,'').trim()} icon`} style={{display:'inline-block',width:'48px',height:'48px',objectFit:'contain',marginRight:'8px',verticalAlign:'middle',cursor:'pointer'}} onClick={handleTitleClick} onError={(e)=>{try{e.target.style.display='none';}catch{}}} />
     <span style={{cursor:'pointer'}} onClick={handleTitleClick}>{displayName}</span>
     {cfg?.token && (
       <span
@@ -3661,11 +3662,12 @@
                   setTxMsg(`Added ${symbol}`);
                 } catch(e){ setTxMsg('Add token failed'); }
               }
-              return <div className="token-card" style={{'--token-color': token.color || '#4ecdc4'}}>
-        <div className="token-header">
-                  <div className="token-name">
-          <span style={{cursor:'pointer'}} onClick={handleTitleClick}>{displayName}</span>
-                    <span
+      return <div className="token-card" style={{'--token-color': token.color || '#4ecdc4'}}>
+    <div className="token-header">
+      <div className="token-name">
+  <img src={`Pics/${(token.name||'').replace(/\s*(?:3x3|4x4|3×3|4×4)\b/gi,'').trim()} (Icon 100).png`} alt={`${(token.name||'').replace(/\s*(?:3x3|4x4|3x3|4x4|3×3|4×4)\b/gi,'').trim()} icon`} style={{display:'inline-block',width:'48px',height:'48px',objectFit:'contain',marginRight:'8px',verticalAlign:'middle',cursor:'pointer'}} onClick={handleTitleClick} onError={(e)=>{try{e.target.style.display='none';}catch{}}} />
+      <span style={{cursor:'pointer'}} onClick={handleTitleClick}>{displayName}</span>
+        <span
                       onClick={addTokenToMetaMask}
                       title={`Add token to MetaMask${cfg?.token ? ` (${cfg.token.slice(0,6)}…${cfg.token.slice(-4)})` : ''}`}
                       style={{cursor:'pointer',fontSize:'0.95rem',display:'inline-flex',alignItems:'center',padding:'2px 4px'}}>🦊</span>
@@ -4198,6 +4200,7 @@
                           title="Open token page"
                           onClick={() => { try { setCarouselIdx(originalIdx); } catch {} try { const slug = typeof slugifyToken==='function'? slugifyToken(token.name):null; if (slug) { try { window.__ALLOW_HASH_NAV = true; } catch {} setHashToSlug(slug); setTimeout(()=>{ try { window.__ALLOW_HASH_NAV = false; } catch {} }, 250); } } catch {} }}
                         >
+                          <img src={`Pics/${(token.name||'').replace(/\s*(?:3x3|4x4|3×3|4×4)\b/gi,'').trim()} (Icon 100).png`} alt={`${(token.name||'').replace(/\s*(?:3x3|4x4|3x3|4x4|3×3|4×4)\b/gi,'').trim()} icon`} style={{display:'inline-block',width:'40px',height:'40px',objectFit:'contain',verticalAlign:'middle',marginRight:'8px',cursor:'pointer'}} onClick={() => { try { setCarouselIdx(originalIdx); } catch {} try { const slug = typeof slugifyToken==='function'? slugifyToken(token.name):null; if (slug) { try { window.__ALLOW_HASH_NAV = true; } catch {} setHashToSlug(slug); setTimeout(()=>{ try { window.__ALLOW_HASH_NAV = false; } catch {} }, 250); } } catch {} }} onError={(e)=>{try{e.target.style.display='none';}catch{}}} />
                           {token.name}
                           <span
                             onClick={(e)=>{ try{ e.preventDefault && e.preventDefault(); e.stopPropagation && e.stopPropagation(); }catch{}; try { addTokenToMetaMask(cfg); } catch {} }}
